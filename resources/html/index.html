@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Run JSON API</title>
+    <link rel="stylesheet" href="https://unpkg.com/element-ui@2.13.0/lib/theme-chalk/index.css">
+</head>
+<body>
+    <div id="app">
+        <el-container>
+            <el-header>
+                <a class="logo" href="https://github.com/seerx/runjson">
+                    <img src="https://raw.githubusercontent.com/seerx/runjson/master/resources/logo.png">
+                    <span>Run-JSON</span>
+                </a>
+            </el-header>
+            <el-container>
+                <el-aside width="260px" class="list">
+                    <el-collapse v-model="activeName" accordion>
+                        <el-collapse-item v-for="(grp, n) in data['groups']" :title="grp.name + grp.description" :name="n + 10" :key="n">
+                            <div class="service" v-for="(svc, n) in grp['services']" :key="n">
+                                <a @click="showInfo(svc)"><h4>{{ svc.name }}</h4></a>
+                                <span>{{ svc.description }}</span>
+                            </div>
+                        </el-collapse-item>
+                    </el-collapse>
+                </el-aside>
+                <el-main>Main</el-main>
+                <el-aside width="400px" class="info">
+                    <el-card class="box-card">
+                        <div slot="header">
+                            <span>{{ current ? current.name : 'Please select service'}}</span>
+                        </div>
+                        <div class="object">
+                            <h4>Request</h4>
+                            <el-tree :props="objectProps"
+                                     :load="loadRequest"
+                                     :empty-text="'None'"
+                                     lazy
+                                     @node-click="handleNodeClick">
+                                <span class="custom-tree-node" slot-scope="{ node, data }">
+                                    <el-tooltip v-if="data.desc !== ''" class="item" effect="dark" :content="data.desc" placement="right">
+                                        <span :style="data['deprecated'] ? 'text-decoration: line-through;' : ''">{{ node.label }}</span>
+                                    </el-tooltip>
+                                    <span v-else :style="data['deprecated'] ? 'text-decoration: line-through;' : ''">{{ node.label }}</span>
+                                    <span>
+                                        <el-button
+                                              type="text"
+                                              size="mini"
+                                              @click="() => remove(node, data)">
+                                            Delete
+                                        </el-button>
+                                    </span>
+
+                                </span>
+                            </el-tree>
+                        </div>
+                        <el-divider></el-divider>
+                        <div class="object">
+                            <h4>Response</h4>
+                            <el-tree :props="objectProps"
+                                     :load="loadResponse"
+                                     :empty-text="'None'"
+                                     lazy
+                                     @node-click="handleNodeClick">
+                                <span class="custom-tree-node" slot-scope="{ node, data }">
+                                    <el-tooltip v-if="data.desc !== ''" class="item" effect="dark" :content="data.desc" placement="right">
+                                        <span :style="data['deprecated'] ? 'text-decoration: line-through;' : ''">{{ node.label }}</span>
+                                    </el-tooltip>
+                                    <span v-else :style="data['deprecated'] ? 'text-decoration: line-through;' : ''">{{ node.label }}</span>
+                                    <span>
+                                        <el-button
+                                                type="text"
+                                                size="mini"
+                                                @click="() => remove(node, data)">
+                                            Delete
+                                        </el-button>
+                                    </span>
+
+                                </span>
+                            </el-tree>
+                        </div>
+<!--                        <div v-for="o in 4" :key="o" class="text item">-->
+<!--                            {{'列表内容 ' + o }}-->
+<!--                        </div>-->
+                    </el-card>
+                </el-aside>
+            </el-container>
+        </el-container>
+    </div>
+</body>
+<!-- import Vue before Element -->
+<script src="https://unpkg.com/vue@v2.6.11/dist/vue.min.js"></script>
+<!-- import JavaScript -->
+<script src="https://unpkg.com/element-ui@2.13.0/lib/index.js"></script>
+<script>
+    new Vue({
+        el: '#app',
+        data: function() {
+            return {
+                visible: false,
+                activeName: 1,
+                current: null,
+                data: [],
+                request: {
+                    rootNode: null,
+                    resolve: null
+                },
+                response: {
+                    rootNode: null,
+                    resolve: null
+                },
+                objectProps: {
+                    // children: 'children',
+                    label: 'name',
+                    isLeaf: 'leaf'
+                }
+            }
+        },
+        mounted () {
+            this.ajaxGet().then(res => {
+                this.data = JSON.parse(res)
+                console.log(this.data)
+            }).catch(err => {
+                console.log(res)
+            })
+        },
+        methods: {
+            loadNode (node, resolve, rootName, idName, arrayFlagField) {
+                if (node.level === 0) {
+                    // this.request = {
+                    //     rootNode: node,
+                    //     resolve: resolve
+                    // }
+                    if (! this.current) {
+                        return resolve([]);
+                    }
+                    objId = this.current[idName]
+
+                    obj = this.data[rootName][objId]
+                    // console.log(obj)
+                    if (obj) {
+                        return resolve([{
+                            name: this.current[arrayFlagField] ? '[' + obj['type'] + ']' : obj['type'],
+                            info: obj,
+                            leaf: obj['children'] === undefined
+                        }]);
+                    } else {
+                        return resolve([]);
+                    }
+                }
+                // console.log(node.data['info'])
+                const data = []
+                const items = node.data['info']['children']
+                if (!items) {
+                    return resolve([]);
+                }
+                for (var n = 0; n < items.length; n ++) {
+                    const item = items[n]
+                    const obj = this.data[rootName][item['reference']]
+                    let name = item['name'] + ':' + item['type']
+                    if (item['array']) {
+                        name = item['name'] + ':[' + item['type'] + ']'
+                    }
+                    data.push({
+                        name: name,
+                        info: obj,
+                        desc: item['description'],
+                        deprecated: item['deprecated'],
+                        // field: item,
+                        // array: item['array'],
+                        leaf: obj['children'] === undefined // ? true : false
+                    })
+                }
+                return resolve(data)
+            },
+            loadRequest (node, resolve) {
+                if (node.level === 0) {
+                    this.request = {
+                        rootNode: node,
+                        resolve: resolve
+                    }
+                }
+                return this.loadNode(node, resolve, 'request', 'inputObjectId', 'inputIsArray')
+            },
+            loadResponse (node, resolve) {
+                if (node.level === 0) {
+                    this.response = {
+                        rootNode: node,
+                        resolve: resolve
+                    }
+                }
+                return this.loadNode(node, resolve, 'response', 'outputObjectId', 'outputIsArray')
+            },
+            showInfo (info) {
+                this.current = info
+                this.request.rootNode.childNodes = [];
+                this.loadRequest(this.request.rootNode, this.request.resolve)
+                this.response.rootNode.childNodes = [];
+                this.loadResponse(this.response.rootNode, this.response.resolve)
+            },
+            ajaxGet (){
+                return new Promise(function(resolve, reject) {
+                    var xhr = new XMLHttpRequest()
+                    xhr.open("GET", "/rj?m=graph", true)
+                    xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+                    xhr.onreadystatechange = function () {
+                        if (xhr.readyState == 4 && xhr.status == 200) {
+                            resolve(xhr.responseText);
+                        }
+                    }
+                    xhr.send()
+                    // xhr.send("game=1&shang=common")
+                })
+            },
+            handleNodeClick(data) {
+                console.log(data);
+            }
+        }
+    })
+</script>
+
+<style>
+    html,body {
+        margin: 0;
+        padding: 0;
+        height: 100%;
+    }
+
+    body #app {
+        height: 100%;
+    }
+
+    .logo {
+        height: 36px;
+        cursor: pointer;
+        display: flex;
+        flex-flow: row;
+        align-items: flex-end;
+    }
+
+    .logo img, .logo span {
+        height: 100%;
+        line-height: 36px;
+        width: auto;
+        vertical-align: middle;
+    }
+
+    .el-header, .el-footer {
+        background: linear-gradient(#f7f7f7, #e2e2e2);
+        background: -webkit-gradient(linear, left top, left bottom, from(#f7f7f7), to(#e2e2e2));
+        color: #333;
+        height: 36px !important;
+        margin: 0;
+        padding: 0;
+    }
+
+    .el-aside {
+        background-color: #D3DCE6;
+        color: #333;
+        text-align: center;
+    }
+
+    .list .el-collapse-item__header {
+        padding: 0 0 0 8px !important;
+    }
+
+    .list .el-collapse-item__content {
+        padding: 0 !important;
+        text-align: left;
+    }
+
+
+    .service {
+        padding: 0 0 8px 25px !important;
+    }
+
+    .service h4 {
+        margin: 0;
+        cursor: pointer;
+    }
+
+    .el-main {
+        background-color: #E9EEF3;
+        color: #333;
+        text-align: center;
+        line-height: 160px;
+    }
+
+    body > #app > .el-container {
+        height: 100%;
+        margin-bottom: 0px;
+    }
+
+    .el-container:nth-child(5) .el-aside,
+    .el-container:nth-child(6) .el-aside {
+        line-height: 100%;
+    }
+
+    .el-container:nth-child(7) .el-aside {
+        line-height: 100%;
+    }
+
+    .info .el-card {
+        height: 100%;
+    }
+
+    .info .el-divider {
+        margin: 10px 0 8px 0 !important;
+    }
+
+    .info .el-card__body {
+        padding: 8px;
+        overflow: auto;
+        height: calc(100% - 79px)
+    }
+
+    .info .object {
+        /*width: 100%;*/
+    }
+
+    .info .object h4 {
+        margin: 0;
+    }
+
+    .custom-tree-node {
+        flex: 1;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        font-size: 14px;
+        padding-right: 8px;
+    }
+</style>
+
+</html>
