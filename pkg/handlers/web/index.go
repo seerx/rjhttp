@@ -10,7 +10,7 @@ type Index struct {
 }
 
 func (i *Index) ServeHTTP(writer http.ResponseWriter, request *http.Request) {
-	file, err := os.Open("/Users/dotjava/workspace/vue/rjhttp/index.html")
+	file, err := os.Open("/Users/dotjava/workspace/go-projects/rjhttp/resources/html/index.html")
 	if err != nil {
 		panic(err)
 	}

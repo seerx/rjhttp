@@ -25,6 +25,7 @@ func NewWebHandler(runner *runjson.Runner) *WebHandler {
 				runner: runner,
 			},
 			"index": &Index{},
+			"file":  &File{},
 		},
 	}
 }
