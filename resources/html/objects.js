@@ -72,9 +72,6 @@ Vue.component("objects", {
                 })
             }
             return resolve(data)
-        },
-        handleNodeClick(data) {
-            console.log(data);
         }
     },
 
@@ -83,10 +80,9 @@ Vue.component("objects", {
              :empty-text="'None'"
              :default-expanded-keys="expandArray"
              node-key="id"
-             lazy
-             @node-click="handleNodeClick">
+             lazy>
         <span class="custom-tree-node" slot-scope="{ node, data }">
-            <el-tooltip v-if="data.desc !== ''" class="item" effect="dark" :content="data.desc" placement="right">
+            <el-tooltip v-if="data.desc && data.desc !== ''" class="item" effect="dark" :content="data.desc" placement="right">
                 <span :style="data['deprecated'] ? 'text-decoration: line-through;' : ''">{{ node.label }}</span>
             </el-tooltip>
             <span v-else :style="data['deprecated'] ? 'text-decoration: line-through;' : ''">{{ node.label }}</span>
@@ -95,5 +91,8 @@ Vue.component("objects", {
             </span>
 
         </span>
-    </el-tree>`
+    </el-tree>`,
+    css: `body {
+        background: #000;
+    }`
 })

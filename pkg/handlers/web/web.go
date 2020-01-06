@@ -15,11 +15,9 @@ type WebHandler struct {
 	hanlderMap map[string]http.Handler
 }
 
-func NewWebHandler(runner *runjson.Runner) *WebHandler {
+func NewWebHandler(runner *runjson.Runner, opt *option.Options) *WebHandler {
 	return &WebHandler{
-		rj: &runj.RjHandler{
-			Runner: runner,
-		},
+		rj: runj.NewRjHandler(runner, opt),
 		hanlderMap: map[string]http.Handler{
 			"graph": &GraphHandler{
 				runner: runner,

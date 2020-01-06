@@ -30,7 +30,7 @@
                     <el-card class="box-card">
                         <div slot="header" class="clearfix">
                             <span>{{ current ? current.name : 'Please select service'}}</span>
-                            <el-button v-if="current" style="float: right; padding: 3px 3px" type="primary" icon="el-icon-arrow-right"></el-button>
+                            <el-button v-if="current" @click="initParam" style="float: right; padding: 3px 3px" type="primary" icon="el-icon-arrow-right"></el-button>
                         </div>
                         <el-card v-if="current" class="desc">
                             {{ current.description }}
@@ -39,7 +39,6 @@
                             <h4>Request</h4>
                             <objects ref="request"></objects>
                         </div>
-<!--                        <el-divider></el-divider>-->
                         <div class="object">
                             <h4>Response</h4>
                             <objects ref="response"></objects>
@@ -47,8 +46,8 @@
                     </el-card>
                 </el-aside>
                 <el-main>
-                    <card :list="list">
-                    </card>
+                    <runner ref="runner">
+                    </runner>
                 </el-main>
             </el-container>
         </el-container>
@@ -58,8 +57,10 @@
 <script src="https://unpkg.com/vue@v2.6.11/dist/vue.min.js"></script>
 <!-- import JavaScript -->
 <script src="https://unpkg.com/element-ui@2.13.0/lib/index.js"></script>
-<script src="/rj?m=file&file=test.js"></script>
+
 <script src="/rj?m=file&file=objects.js"></script>
+<script src="/rj?m=file&file=runner.js"></script>
+<script src="/rj?m=file&file=ajax.js"></script>
 
 <script>
     new Vue({
@@ -87,7 +88,7 @@
             }
         },
         mounted () {
-            this.ajaxGet().then(res => {
+            ajaxGet().then(res => {
                 this.data = JSON.parse(res)
                 console.log(this.data)
             }).catch(err => {
@@ -95,6 +96,12 @@
             })
         },
         methods: {
+            initParam () {
+                let isAry = this.current['inputIsArray']
+                let objId = this.current['inputObjectId']
+                let tree = this.data['request']
+                this.$refs.runner.init(this.current['name'], tree, objId, isAry)
+            },
             showInfo (info) {
                 this.current = info
 
@@ -104,23 +111,6 @@
                 this.$refs.response.init(info['outputObjectId'],
                     info['outputIsArray'],
                     this.data['response'])
-            },
-            ajaxGet (){
-                return new Promise(function(resolve, reject) {
-                    var xhr = new XMLHttpRequest()
-                    xhr.open("GET", "/rj?m=graph", true)
-                    xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-                    xhr.onreadystatechange = function () {
-                        if (xhr.readyState == 4 && xhr.status == 200) {
-                            resolve(xhr.responseText);
-                        }
-                    }
-                    xhr.send()
-                    // xhr.send("game=1&shang=common")
-                })
-            },
-            handleNodeClick(data) {
-                console.log(data);
             }
         }
     })
@@ -135,6 +125,17 @@
 
     body #app {
         height: 100%;
+    }
+
+    .el-main {
+        background-color: #E9EEF3;
+        color: #333;
+        padding: 2px;
+    }
+
+    body > #app > .el-container {
+        height: 100%;
+        margin-bottom: 0px;
     }
 
     .logo {
@@ -161,10 +162,12 @@
         padding: 0;
     }
 
+
     .el-aside {
         background-color: #D3DCE6;
         color: #333;
         text-align: center;
+        padding: 2px;
     }
 
     .list .el-collapse-item__header {
@@ -186,26 +189,16 @@
         cursor: pointer;
     }
 
-    .el-main {
-        background-color: #E9EEF3;
-        color: #333;
-        text-align: center;
-        line-height: 160px;
-    }
 
-    body > #app > .el-container {
-        height: 100%;
-        margin-bottom: 0px;
-    }
 
-    .el-container:nth-child(5) .el-aside,
-    .el-container:nth-child(6) .el-aside {
-        line-height: 100%;
-    }
+    /*.el-container:nth-child(5) .el-aside,*/
+    /*.el-container:nth-child(6) .el-aside {*/
+    /*    line-height: 100%;*/
+    /*}*/
 
-    .el-container:nth-child(7) .el-aside {
-        line-height: 100%;
-    }
+    /*.el-container:nth-child(7) .el-aside {*/
+    /*    line-height: 100%;*/
+    /*}*/
 
     .info {
     }
@@ -259,6 +252,23 @@
     }
     .clearfix:after {
         clear: both
+    }
+
+
+    .runner {
+        height: 100%;
+        overflow: auto;
+    }
+    .runner .el-card__header {
+        text-align: left;
+        padding: 8px 12px 8px 12px;
+    }
+    .runner .el-card__body {
+        height: calc(100% - 55px) !important;
+        padding: 8px;
+    }
+    .runner .el-card__body .el-textarea__inner {
+        resize: none;
     }
 </style>
 

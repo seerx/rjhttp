@@ -15,13 +15,13 @@ import (
 )
 
 type Builder struct {
-	option *option.Configure
+	option *option.Options
 	runner *runjson.Runner
 }
 
 func NewBuilder() *Builder {
 	return &Builder{
-		option: &option.Configure{},
+		option: &option.Options{},
 		runner: runjson.New(),
 	}
 }
@@ -31,22 +31,19 @@ func (b *Builder) Register(loaders ...rj.Loader) {
 	b.runner.Register(loaders...)
 }
 
-// SetWebClient 设置是否启用 Web 界面
-func (b *Builder) SetWebClient(enable bool) *Builder {
-	b.option.CheckWebClientTag = enable
+// EnableWebClient 设置是否启用 Web 界面
+func (b *Builder) EnableWebClient(enable bool) *Builder {
+	b.option.EnableWebClient = enable
 	return b
 }
 
 func (b *Builder) Build() http.Handler {
 	var h http.Handler
 
-	if b.option.CheckWebClientTag {
-		h = web.NewWebHandler(b.runner)
+	if b.option.EnableWebClient {
+		h = web.NewWebHandler(b.runner, b.option)
 	} else {
-		h = &runj.RjHandler{
-			Runner: b.runner,
-			Option: b.option,
-		}
+		h = runj.NewRjHandler(b.runner, b.option)
 	}
 
 	// 解析功能

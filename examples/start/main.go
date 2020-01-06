@@ -10,7 +10,7 @@ import (
 )
 
 func init() {
-	rjhttp.Default.SetWebClient(true)
+	rjhttp.Default.EnableWebClient(true)
 	rjhttp.Default.Register(&demo.Demo1{})
 }
 

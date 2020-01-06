@@ -1,0 +1,6 @@
+resources/html/.idea/html.iml
+resources/html/.idea/misc.xml
+resources/html/.idea/modules.xml
+resources/html/.idea/vcs.xml
+examples/start/debug
+go.sum
