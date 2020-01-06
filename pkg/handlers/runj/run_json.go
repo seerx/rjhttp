@@ -15,12 +15,14 @@ import (
 	"github.com/seerx/rjhttp/pkg/option"
 )
 
+// RjHandler 处理 runjson 请求
 type RjHandler struct {
 	Runner  *runjson.Runner
 	Option  *option.Options
 	parseFn func(request *http.Request) (rj.Requests, error)
 }
 
+// NewRjHandler 创建 runjson handler
 func NewRjHandler(runner *runjson.Runner, opt *option.Options) *RjHandler {
 	if opt.EnableUpload {
 		// 可以上传文件
