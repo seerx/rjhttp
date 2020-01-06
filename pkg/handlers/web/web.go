@@ -9,14 +9,15 @@ import (
 	"github.com/seerx/rjhttp/pkg/option"
 )
 
-// WebHandler 界面处理
-type WebHandler struct {
+// Handler 界面处理
+type Handler struct {
 	rj         *runj.RjHandler
 	hanlderMap map[string]http.Handler
 }
 
-func NewWebHandler(runner *runjson.Runner, opt *option.Options) *WebHandler {
-	return &WebHandler{
+// NewHandler 创建含有 Web 界面的 runjson handler
+func NewHandler(runner *runjson.Runner, opt *option.Options) *Handler {
+	return &Handler{
 		rj: runj.NewRjHandler(runner, opt),
 		hanlderMap: map[string]http.Handler{
 			"graph": &GraphHandler{
@@ -35,11 +36,16 @@ func parseWebParam(request *http.Request) string {
 	return ""
 }
 
-func (w *WebHandler) ServeHTTP(writer http.ResponseWriter, request *http.Request) {
+func (w *Handler) ServeHTTP(writer http.ResponseWriter, request *http.Request) {
 	method := parseWebParam(request)
-	if h, exists := w.hanlderMap[method]; exists {
-		h.ServeHTTP(writer, request)
-	} else {
+	if method == "" {
+		// 如果没有 m 参数，则认为是 runjson
 		w.rj.ServeHTTP(writer, request)
+	} else {
+		if h, exists := w.hanlderMap[method]; exists {
+			h.ServeHTTP(writer, request)
+		} else {
+			w.rj.ServeHTTP(writer, request)
+		}
 	}
 }

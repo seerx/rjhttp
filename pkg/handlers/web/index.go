@@ -6,6 +6,7 @@ import (
 	"os"
 )
 
+// Index Web 首页
 type Index struct {
 }
 

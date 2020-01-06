@@ -7,6 +7,7 @@ import (
 	"github.com/seerx/runjson"
 )
 
+// GraphHandler API 图处理 Handler
 type GraphHandler struct {
 	runner *runjson.Runner
 }

@@ -6,8 +6,10 @@ import (
 	"os"
 )
 
+// BASE HTML 文件路径
 const BASE = "/Users/dotjava/workspace/go-projects/rjhttp/resources/html/"
 
+// File 文件处理 Handler
 type File struct {
 }
 

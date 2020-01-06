@@ -14,11 +14,13 @@ import (
 	"github.com/seerx/rjhttp/pkg/option"
 )
 
+// Builder 定义
 type Builder struct {
 	option *option.Options
 	runner *runjson.Runner
 }
 
+// NewBuilder 创建 builder
 func NewBuilder() *Builder {
 	return &Builder{
 		option: &option.Options{},
@@ -37,11 +39,12 @@ func (b *Builder) EnableWebClient(enable bool) *Builder {
 	return b
 }
 
+// Build 创建 handler
 func (b *Builder) Build() http.Handler {
 	var h http.Handler
 
 	if b.option.EnableWebClient {
-		h = web.NewWebHandler(b.runner, b.option)
+		h = web.NewHandler(b.runner, b.option)
 	} else {
 		h = runj.NewRjHandler(b.runner, b.option)
 	}
