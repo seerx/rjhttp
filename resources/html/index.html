@@ -46,7 +46,7 @@
                     </el-card>
                 </el-aside>
                 <el-main>
-                    <runner ref="runner">
+                    <runner ref="runner" :rootUrl="rootUrl">
                     </runner>
                 </el-main>
             </el-container>
@@ -67,6 +67,7 @@
         el: '#app',
         data: function() {
             return {
+                rootUrl: '',
                 visible: false,
                 activeName: 0,
                 current: null,
@@ -88,9 +89,11 @@
             }
         },
         mounted () {
-            ajaxGet().then(res => {
+            loc = document.location
+            this.rootUrl = loc.pathname
+            let ajax = new Ajax(this.rootUrl)
+            ajax.Get('m=graph').then(res => {
                 this.data = JSON.parse(res)
-                console.log(this.data)
             }).catch(err => {
                 console.log(res)
             })
@@ -100,7 +103,7 @@
                 let isAry = this.current['inputIsArray']
                 let objId = this.current['inputObjectId']
                 let tree = this.data['request']
-                this.$refs.runner.init(this.current['name'], tree, objId, isAry)
+                this.$refs.runner.init(this.rootUrl, this.current['name'], tree, objId, isAry)
             },
             showInfo (info) {
                 this.current = info

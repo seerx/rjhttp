@@ -1,6 +1,11 @@
 package demo
 
 import (
+	"io/ioutil"
+	"net/http"
+	"os"
+
+	"github.com/seerx/rjhttp/pkg/handlers/runj"
 	"github.com/seerx/runjson/pkg/rj"
 )
 
@@ -25,7 +30,11 @@ type Resp struct {
 }
 
 func (d *Demo1) Test1(req *Req) ([]*Resp, error) {
-	return []*Resp{}, nil
+	return []*Resp{&Resp{
+		ID:   req.ID,
+		Name: "Tom",
+		Age:  12,
+	}}, nil
 }
 
 func (d *Demo1) Test1Info() rj.FuncInfo {
@@ -46,4 +55,20 @@ func (d *Demo1) Test2Info() rj.FuncInfo {
 		Deprecated:  false,
 		History:     nil,
 	}
+}
+
+func (d Demo1) TestImage(writer http.ResponseWriter) (*runj.RjBinary, error) {
+	writer.Header().Add("Content-Type", "image/jpeg")
+	file, err := os.Open("/Users/dotjava/workspace/go-projects/collection/data/images/anping/andianyafan/c1/2019_07_27-2019_07_27/10.10.16.18_01_20190727191212326_TIMING.jpg")
+	if err != nil {
+		return nil, err
+	}
+	defer file.Close()
+	data, err := ioutil.ReadAll(file)
+	if err != nil {
+		return nil, err
+	}
+	writer.Write(data)
+	//writer
+	return &runj.RjBinary{}, nil
 }

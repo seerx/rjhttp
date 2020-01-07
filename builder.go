@@ -33,6 +33,28 @@ func (b *Builder) Register(loaders ...rj.Loader) {
 	b.runner.Register(loaders...)
 }
 
+// InjectRaw 注册注入函数 func(arg map[string]interface{}) (*Type, error)
+func (b *Builder) Inject(fns ...interface{}) error {
+	for _, fn := range fns {
+		if err := b.runner.Inject(fn); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+// Inject 注册注入函数 func(ctx inject.Context) (*Type, error)
+// 此注入，可以直接获得 http.Request 以及 http.ResponseWriter
+//func (b *Builder) Inject(fns ...interface{}) error {
+//	for _, fn := range fns {
+//		if err := inject.Proxy(b.runner, fn); err != nil {
+//			return err
+//		}
+//	}
+//
+//	return nil
+//}
+
 // EnableWebClient 设置是否启用 Web 界面
 func (b *Builder) EnableWebClient(enable bool) *Builder {
 	b.option.EnableWebClient = enable

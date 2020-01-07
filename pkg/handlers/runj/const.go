@@ -4,8 +4,11 @@ import (
 	"reflect"
 )
 
-const requestField = "__request__"
-const writerField = "__writer__"
+// RequestField http.Request
+const RequestField = "__request__"
+
+// WriterField http.ResponseWriter
+const WriterField = "__writer__"
 
 // RjBinary 返回二进制文件(含图片)时，返回直结构
 type RjBinary struct {

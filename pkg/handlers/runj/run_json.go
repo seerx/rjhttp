@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"net/url"
 	"strings"
 
 	"github.com/seerx/runjson/pkg/context"
@@ -21,6 +22,16 @@ type RjHandler struct {
 	Runner  *runjson.Runner
 	Option  *option.Options
 	parseFn func(request *http.Request) (rj.Requests, error)
+}
+
+// ParseRequest 从注入函数的参数中获取 http.Request
+func ParseRequest(injectArg map[string]interface{}) *http.Request {
+	return injectArg[RequestField].(*http.Request)
+}
+
+// ParseWriter 从注入函数的参数中提取 http.ResponseWriter
+func ParseWriter(injectArg map[string]interface{}) http.ResponseWriter {
+	return injectArg[WriterField].(http.ResponseWriter)
 }
 
 // NewRjHandler 创建 runjson handler
@@ -68,7 +79,16 @@ func parseBody(request *http.Request) (rj.Requests, error) {
 func parseQuery(request *http.Request) (rj.Requests, error) {
 	// http get 请求，url 的 "?" 之后为请求内容
 	// ?[{"service": "demo1.Test1", "args":{"id":1}}]
-	query := request.URL.Query().Get(option.DefaultRunJSONFieldName)
+	body := request.RequestURI
+	p := strings.Index(body, "?")
+	if p < 0 {
+		return nil, fmt.Errorf("No request param found")
+	}
+	query, err := url.QueryUnescape(body[p+1:])
+	//query, err := url.ParseQuery(request.URL.RawQuery)
+	if err != nil {
+		return nil, fmt.Errorf("Request param Unescape error")
+	}
 	if query == "" {
 		// 查询字符串是空
 		return nil, fmt.Errorf("No request param found")
@@ -100,8 +120,8 @@ func (r *RjHandler) ServeHTTP(writer http.ResponseWriter, request *http.Request)
 		response, err := r.Runner.RunRequests(&context.Context{
 			Context: context2.Background(),
 			Param: map[string]interface{}{
-				requestField: request,
-				writerField:  writer,
+				RequestField: request,
+				WriterField:  writer,
 			},
 		}, reqs)
 		if err != nil {
@@ -120,15 +140,19 @@ func (r *RjHandler) ServeHTTP(writer http.ResponseWriter, request *http.Request)
 					}
 				}
 			}
+			res.Data = response
 		}
 	}
 	// 序列化 json
 	data, err := json.Marshal(res)
 	if err != nil {
+		// 序列化数据时发生错误
 		res.Error = err.Error()
+		res.Data = nil
+		data, _ := json.Marshal(res)
+		writer.Write(data)
 	} else {
 		// 返回数据
-		res.Error = ""
 		writer.Write(data)
 	}
 }
