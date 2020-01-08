@@ -20,23 +20,17 @@ import (
 // RjHandler 处理 runjson 请求
 type RjHandler struct {
 	Runner  *runjson.Runner
-	Option  *option.Options
-	parseFn func(request *http.Request) (rj.Requests, error)
-}
-
-// ParseRequest 从注入函数的参数中获取 http.Request
-func ParseRequest(injectArg map[string]interface{}) *http.Request {
-	return injectArg[RequestField].(*http.Request)
-}
-
-// ParseWriter 从注入函数的参数中提取 http.ResponseWriter
-func ParseWriter(injectArg map[string]interface{}) http.ResponseWriter {
-	return injectArg[WriterField].(http.ResponseWriter)
+	Option  *option.Option
+	parseFn func(request *http.Request, maxSize int64) (rj.Requests, error)
 }
 
 // NewRjHandler 创建 runjson handler
-func NewRjHandler(runner *runjson.Runner, opt *option.Options) *RjHandler {
+func NewRjHandler(runner *runjson.Runner, opt *option.Option) *RjHandler {
 	if opt.EnableUpload {
+		// 注入上传文件操作结构体
+		if err := runner.Inject(InjectUpload); err != nil {
+			panic(err)
+		}
 		// 可以上传文件
 		return &RjHandler{
 			Runner:  runner,
@@ -51,23 +45,34 @@ func NewRjHandler(runner *runjson.Runner, opt *option.Options) *RjHandler {
 	}
 
 }
-func parseFieldOrBody(request *http.Request) (rj.Requests, error) {
+func parseFieldOrBody(request *http.Request, maxSize int64) (rj.Requests, error) {
 	// http POST 判断是否有指定参数 field 名称
 	//	如果有则使用 PostForm 中的此值作为请求参数
 	//	如果没有，则使用 body 作为请求参数
+
 	fieldName := request.Header.Get(option.PostFieldNameInHTTPHeader)
 	if fieldName == "" {
-		return parseBody(request)
+		return parseBody(request, maxSize)
 	}
 	var reqs rj.Requests
-	val := request.PostForm.Get(fieldName)
+
+	if err := request.ParseMultipartForm(maxSize); err != nil {
+		return nil, err
+	}
+
+	//request.ParseMultipartForm(1000000)
+	//val := request.PostForm.Get(fieldName)
+	val := request.FormValue(fieldName)
+	if val == "" {
+		return nil, fmt.Errorf("No request found")
+	}
 	if err := json.NewDecoder(strings.NewReader(val)).Decode(&reqs); err != nil {
 		return nil, err
 	}
 	return reqs, nil
 }
 
-func parseBody(request *http.Request) (rj.Requests, error) {
+func parseBody(request *http.Request, maxSize int64) (rj.Requests, error) {
 	// http POST body 作为请求参数
 	var reqs rj.Requests
 	if err := json.NewDecoder(request.Body).Decode(&reqs); err != nil {
@@ -109,7 +114,7 @@ func (r *RjHandler) ServeHTTP(writer http.ResponseWriter, request *http.Request)
 		reqs, err = parseQuery(request)
 	} else {
 		// http POST
-		reqs, err = r.parseFn(request)
+		reqs, err = r.parseFn(request, r.Option.UploadMaxBytes)
 	}
 
 	if err != nil {
@@ -122,6 +127,7 @@ func (r *RjHandler) ServeHTTP(writer http.ResponseWriter, request *http.Request)
 			Param: map[string]interface{}{
 				RequestField: request,
 				WriterField:  writer,
+				MaxSizeField: r.Option.UploadMaxBytes,
 			},
 		}, reqs)
 		if err != nil {

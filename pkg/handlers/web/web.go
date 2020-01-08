@@ -16,7 +16,7 @@ type Handler struct {
 }
 
 // NewHandler 创建含有 Web 界面的 runjson handler
-func NewHandler(runner *runjson.Runner, opt *option.Options) *Handler {
+func NewHandler(runner *runjson.Runner, opt *option.Option) *Handler {
 	return &Handler{
 		rj: runj.NewRjHandler(runner, opt),
 		hanlderMap: map[string]http.Handler{

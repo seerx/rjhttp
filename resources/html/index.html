@@ -58,9 +58,9 @@
 <!-- import JavaScript -->
 <script src="https://unpkg.com/element-ui@2.13.0/lib/index.js"></script>
 
-<script src="/rj?m=file&file=objects.js"></script>
-<script src="/rj?m=file&file=runner.js"></script>
-<script src="/rj?m=file&file=ajax.js"></script>
+<script src="?m=file&file=objects.js"></script>
+<script src="?m=file&file=runner.js"></script>
+<script src="?m=file&file=ajax.js"></script>
 
 <script>
     new Vue({
@@ -103,16 +103,18 @@
                 let isAry = this.current['inputIsArray']
                 let objId = this.current['inputObjectId']
                 let tree = this.data['request']
-                this.$refs.runner.init(this.rootUrl, this.current['name'], tree, objId, isAry)
+                this.$refs.runner.init(this.rootUrl, this.current['name'],  tree, objId, isAry)
             },
             showInfo (info) {
                 this.current = info
-
+                let reqiure = this.current['inputIsRequire']
                 this.$refs.request.init(info['inputObjectId'],
                     info['inputIsArray'],
+                    reqiure,
                     this.data['request'])
                 this.$refs.response.init(info['outputObjectId'],
                     info['outputIsArray'],
+                    false,
                     this.data['response'])
             }
         }
@@ -272,6 +274,32 @@
     }
     .runner .el-card__body .el-textarea__inner {
         resize: none;
+    }
+
+    .runner .el-card__header .el-input {
+        width: 180px !important;
+        margin-top: 0px;
+        margin-bottom: -1px;
+    }
+    .runner .el-card__header .el-input .el-input__inner {
+        padding-bottom: 0px;
+        line-height: 22px;
+        height: 22px;
+        padding-left: 3px;
+        padding-right: 3px;
+        border-bottom-right-radius: 0px;
+        border-top-right-radius: 0px;
+    }
+    .runner .el-card__header .btn {
+        margin-left: 6px;
+        float: right;
+        padding: 3px 3px;
+    }
+    .runner .el-card__header .upload {
+        margin-left: 0px;
+        border-left: none;
+        border-bottom-left-radius: 0px;
+        border-top-left-radius: 0px;
     }
 </style>
 

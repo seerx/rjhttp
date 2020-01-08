@@ -51,10 +51,27 @@ func (d *Demo1) Test2(req *Req) ([]string, error) {
 
 func (d *Demo1) Test2Info() rj.FuncInfo {
 	return rj.FuncInfo{
-		Description: "测试函数",
-		Deprecated:  false,
-		History:     nil,
+		Description:    "测试函数",
+		Deprecated:     false,
+		History:        nil,
+		InputIsRequire: true,
 	}
+}
+
+func (d Demo1) TestUploadInfo() rj.FuncInfo {
+	return rj.FuncInfo{
+		Description:    "测试文件上传",
+		Deprecated:     false,
+		InputIsRequire: false,
+		History:        nil,
+	}
+}
+
+func (d Demo1) TestUpload(upload *runj.Upload) (string, error) {
+	if err := upload.StoreFile("./test", "file"); err != nil {
+		return "Error", err
+	}
+	return "ok", nil
 }
 
 func (d Demo1) TestImage(writer http.ResponseWriter) (*runj.RjBinary, error) {

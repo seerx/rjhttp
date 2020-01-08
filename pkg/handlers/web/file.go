@@ -24,7 +24,7 @@ func (i *File) ServeHTTP(writer http.ResponseWriter, request *http.Request) {
 	if err != nil {
 		panic(err)
 	}
-	writer.Header().Add("Content-Type", "text/html")
+	//writer.Header().Add("Content-Type", "text/html")
 	writer.Write(data)
 
 }

@@ -3,7 +3,6 @@ package main
 import (
 	"fmt"
 	"net/http"
-	"reflect"
 
 	"github.com/seerx/rjhttp/pkg/handlers/runj"
 
@@ -13,12 +12,10 @@ import (
 )
 
 func init() {
-	rjhttp.Default.EnableWebClient(true)
-	val := reflect.ValueOf(InjectResponse)
-	//fn := runtime.FuncForPC(reflect.ValueOf(InjectResponse).Pointer()).Name()
-	fmt.Println(val.Type().Name())
-	rjhttp.Default.Inject(InjectResponse)
-	rjhttp.Default.Register(&demo.Demo1{})
+	rjhttp.Default.EnableWebClient(true).
+		EnableUpload(true).
+		Inject(InjectResponse).
+		Register(&demo.Demo1{})
 }
 
 func InjectResponse(arg map[string]interface{}) (http.ResponseWriter, error) {

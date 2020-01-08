@@ -3,6 +3,7 @@ Vue.component("objects", {
         return {
             objectId: '',
             objectIsArray: false,
+            objectIsRequire: false,
             objectMap: null,
             rootNode: null,
             resolve: null,
@@ -14,8 +15,9 @@ Vue.component("objects", {
         }
     },
     methods: {
-        init (objectId, objectIsArray, objectMap) {
+        init (objectId, objectIsArray, require, objectMap) {
             this.objectId = objectId
+            this.objectIsRequire = require
             this.objectIsArray = objectIsArray
             this.objectMap = objectMap
             this.rootNode.childNodes = [];
@@ -36,10 +38,15 @@ Vue.component("objects", {
                 // console.log(obj)
                 if (obj) {
                     // this.expandArray = [obj['id']]
+                    let name = this.objectIsArray ? '[' + obj['type'] + ']' : obj['type']
+                    if (this.objectIsRequire) {
+                        name = '*' + name
+                    }
                     return resolve([{
                         id: obj['id'],
-                        name: this.objectIsArray ? '[' + obj['type'] + ']' : obj['type'],
+                        name: name,
                         info: obj,
+                        require: this.objectIsRequire,
                         expanded: true,
                         leaf: obj['children'] === undefined
                     }]);
@@ -60,12 +67,17 @@ Vue.component("objects", {
                 if (item['array']) {
                     name = item['name'] + ':[' + item['type'] + ']'
                 }
+                if (item['require']) {
+                    name = '*' + name
+                }
+
                 data.push({
                     id: obj['id'] + node.level,
                     name: name,
                     info: obj,
                     desc: item['description'],
                     deprecated: item['deprecated'],
+                    require: item['require'],
                     // field: item,
                     // array: item['array'],
                     leaf: obj['children'] === undefined // ? true : false
