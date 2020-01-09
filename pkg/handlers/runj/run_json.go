@@ -109,12 +109,12 @@ func (r *RjHandler) ServeHTTP(writer http.ResponseWriter, request *http.Request)
 	res := RjResponse{}
 	var reqs rj.Requests
 	var err error
-	if request.Method == http.MethodGet {
-		// http GET
-		reqs, err = parseQuery(request)
-	} else {
-		// http POST
+	if request.Method == http.MethodPost || request.Method == http.MethodPut {
+		// http POST PUT
 		reqs, err = r.parseFn(request, r.Option.UploadMaxBytes)
+	} else {
+		// http Other methods
+		reqs, err = parseQuery(request)
 	}
 
 	if err != nil {

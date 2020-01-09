@@ -17,7 +17,7 @@
             <el-container>
                 <el-aside width="260px" class="list">
                     <el-collapse v-model="activeName" accordion>
-                        <el-collapse-item v-for="(grp, n) in data['groups']" :title="grp.name + grp.description" :name="n" :key="n">
+                        <el-collapse-item v-for="(grp, n) in data['groups']" :title="grp.name + ' > ' + grp.description" :name="n" :key="n">
                             <div class="service" v-for="(svc, n) in grp['services']" :key="n">
                                 <a @click="showInfo(svc)"><h4>{{ svc.name }}</h4></a>
                                 <span>{{ svc.description }}</span>
