@@ -39,6 +39,12 @@ func parseWebParam(request *http.Request) string {
 func (w *Handler) ServeHTTP(writer http.ResponseWriter, request *http.Request) {
 	method := parseWebParam(request)
 	if method == "" {
+		if request.Method == http.MethodGet {
+			if request.URL.RawQuery == "" {
+				w.hanlderMap["index"].ServeHTTP(writer, request)
+				return
+			}
+		}
 		// 如果没有 m 参数，则认为是 runjson
 		w.rj.ServeHTTP(writer, request)
 	} else {

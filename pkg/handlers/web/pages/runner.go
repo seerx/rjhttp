@@ -1,3 +1,8 @@
+package pages
+
+const RunnerTemplate = "`<el-card class='box-card runner'><div slot='header' class='clearfix'><span>{{ title }}</span><el-button title='GET' v-if=\"json!==''\" @click=\"get\" class='btn' type='success' icon='el-icon-bottom'></el-button><el-button title='POST' v-if=\"json!==''\" @click=\"post\" class='btn' type='primary' icon='el-icon-video-play'></el-button><el-button title='OPEN' v-if=\"json!==''\" @click=\"open\" class='btn' type='info' icon='el-icon-link'></el-button><el-button title='UPLOAD' v-if=\"json!==''\" @click=\"upload\" class='upload btn' type='warning' icon='el-icon-upload'></el-button><input ref='file' type='file' style='display: none;' @change=\"doUpload\"><el-input v-if=\"json!==''\" placeholder='Please input upload field' style='float: right;' v-model=\"file\"></el-input></div><el-input v-model=\"json\" type='textarea' rows='10' style='width:100%;'></el-input><div class='response' style='padding: 8px; border-bottom-radius: 4px; border: solid 1px rgb(220, 223, 230);'><div v-if=\"complete && success\"><i class='el-icon-success' style='color: rgb(103, 194, 58);' type='success'></i> Success [{{requestCount}}]</div><div v-if=\"complete && !success\"><i class='el-icon-error' style='color: red;' type='error'></i> Failed [{{requestCount}}]</div><pre style='width: 100%;' >{{ response }}</pre></div></el-card>`"
+
+const RunnerContent = `
 Vue.component("runner", {
     data () {
         return {
@@ -142,32 +147,6 @@ Vue.component("runner", {
             })
         }
     },
-    template: `<el-card class='box-card runner'>
-                    <div slot='header' class='clearfix'>
-                        <span>{{ title }}</span>
-                        <el-button title='GET' v-if="json!==''" @click="get" class='btn' type='success' icon='el-icon-bottom
-'></el-button>    
-                        <el-button title='POST' v-if="json!==''" @click="post" class='btn' type='primary' icon='el-icon-video-play
-'></el-button>
-                        
-                        <el-button title='OPEN' v-if="json!==''" @click="open" class='btn' type='info' icon='el-icon-link
-'></el-button>
-                        <el-button title='UPLOAD' v-if="json!==''" @click="upload" class='upload btn' type='warning' icon='el-icon-upload
-'></el-button><input ref='file' type='file' style='display: none;' @change="doUpload">
-                        <el-input v-if="json!==''" placeholder='Please input upload field' style='float: right;'
-                            v-model="file">
-                        </el-input>
-                    </div>
-                    <el-input v-model="json" type='textarea' rows='10' style='width:100%;'></el-input> 
-                    <div class='response' style='padding: 8px; border-bottom-radius: 4px; border: solid 1px rgb(220, 223, 230);'>
-                        <div v-if="complete && success">
-                            <i class='el-icon-success' style='color: rgb(103, 194, 58);' type='success'></i> Success [{{requestCount}}]
-                        </div>
-                        <div v-if="complete && !success">
-                            <i class='el-icon-error' style='color: red;' type='error'></i> Failed [{{requestCount}}]
-                        </div>
-                        
-                        <pre style='width: 100%;' >{{ response }}</pre>
-                    </div>
-                </el-card>`
+    template: ` + RunnerTemplate + `
 })
+`
