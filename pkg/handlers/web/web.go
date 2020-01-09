@@ -23,8 +23,8 @@ func NewHandler(runner *runjson.Runner, opt *option.Option) *Handler {
 			"graph": &GraphHandler{
 				runner: runner,
 			},
-			"index": &Index{},
-			"file":  &File{},
+			"index": &Index{opt.WebDebug},
+			"file":  &File{opt.WebDebug},
 		},
 	}
 }

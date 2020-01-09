@@ -12,6 +12,7 @@ const BASE = "/Users/dotjava/workspace/go-projects/rjhttp/resources/html/"
 
 // File 文件处理 Handler
 type File struct {
+	debug bool
 }
 
 var fileMap = map[string][]byte{
@@ -22,7 +23,13 @@ var fileMap = map[string][]byte{
 
 func (i *File) ServeHTTP(writer http.ResponseWriter, request *http.Request) {
 	fileName := request.URL.Query().Get("file")
-	conent, ok := fileMap[fileName]
+
+	if i.debug {
+		returnFile(writer, "./resources/html/"+fileName)
+		return
+	}
+
+	content, ok := fileMap[fileName]
 	if !ok {
 		panic(fmt.Errorf(""))
 	}
@@ -36,6 +43,6 @@ func (i *File) ServeHTTP(writer http.ResponseWriter, request *http.Request) {
 	//	panic(err)
 	//}
 	//writer.Header().Add("Content-Type", "text/html")
-	writer.Write(conent)
+	writer.Write(content)
 
 }
