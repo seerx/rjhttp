@@ -10,7 +10,7 @@ import (
 )
 
 type RequestArg struct {
-	Name string `json:"name" rj:"desc:姓名,limit:3<=$v<10"`
+	Name string `json:"name" rj:"desc:姓名,999,range:3<=$v<10"`
 }
 
 type Arg struct {

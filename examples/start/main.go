@@ -23,6 +23,19 @@ func InjectResponse(arg map[string]interface{}) (http.ResponseWriter, error) {
 }
 
 func main() {
+	//var cc cache.Cache
+	//cc = memory.New(10, 0, 10*time.Minute)
+	//
+	//for n := 0; n < 100000; n++ {
+	//	cc.Set(fmt.Sprintf("%d", n), n)
+	//}
+	//
+	//for n := 0; n < 10000; n++ {
+	//	cc.Get(fmt.Sprintf("%d", n))
+	//}
+	//
+	//fmt.Println(cc.Info())
+
 	mux := &http.ServeMux{}
 	svr := &http.Server{Addr: fmt.Sprintf(":%d", 8080), Handler: mux}
 	mux.Handle("/rj", rjhttp.Default.Build())
