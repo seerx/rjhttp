@@ -23,6 +23,9 @@ func InjectResponse(arg map[string]interface{}) (http.ResponseWriter, error) {
 }
 
 func main() {
+	//fmt.Println(utils.UUID())
+	//fmt.Println(utils.UUID())
+	//fmt.Println(utils.UUID())
 	//var cc cache.Cache
 	//cc = memory.New(10, 0, 10*time.Minute)
 	//
