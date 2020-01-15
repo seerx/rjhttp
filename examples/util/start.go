@@ -14,9 +14,9 @@ func StartService(pattern string, port int) {
 		pattern = "/" + pattern
 	}
 	// 允许打开 API 的说明页面
-	rjhttp.Default.EnableWebClient(true)
+	rjhttp.EnableWebClient(true)
 	mux := &http.ServeMux{}
 	svr := &http.Server{Addr: fmt.Sprintf(":%d", port), Handler: mux}
-	mux.Handle(pattern, rjhttp.Default.Build())
+	mux.Handle(pattern, rjhttp.Build())
 	log.Fatal(svr.ListenAndServe())
 }

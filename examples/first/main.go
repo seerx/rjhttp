@@ -29,6 +29,6 @@ func (f *First) Hello() (string, error) {
 }
 
 func main() {
-	rjhttp.Default.Register(&First{})
+	rjhttp.Register(&First{})
 	util.StartService("", 8080)
 }

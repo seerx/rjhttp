@@ -34,6 +34,6 @@ func (a *Arg) SayHello(arg *RequestArg) (string, error) {
 }
 
 func main() {
-	rjhttp.Default.Register(&Arg{})
+	rjhttp.Register(&Arg{})
 	util.StartService("", 8080)
 }

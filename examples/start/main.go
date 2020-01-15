@@ -4,15 +4,15 @@ import (
 	"fmt"
 	"net/http"
 
+	"github.com/seerx/rjhttp"
+
 	"github.com/seerx/rjhttp/pkg/handlers/runj"
 
 	"github.com/seerx/rjhttp/examples/start/demo"
-
-	"github.com/seerx/rjhttp"
 )
 
 func init() {
-	rjhttp.Default.EnableWebClient(true).
+	rjhttp.EnableWebClient(true).
 		EnableUpload(true).
 		Inject(InjectResponse).
 		Register(&demo.Demo1{})
@@ -41,6 +41,6 @@ func main() {
 
 	mux := &http.ServeMux{}
 	svr := &http.Server{Addr: fmt.Sprintf(":%d", 8080), Handler: mux}
-	mux.Handle("/rj", rjhttp.Default.Build())
+	mux.Handle("/rj", rjhttp.Build())
 	svr.ListenAndServe()
 }
