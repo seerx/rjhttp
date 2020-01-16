@@ -37,9 +37,7 @@ func (b *Builder) Register(loaders ...rj.Loader) *Builder {
 // Inject 注册注入函数 func(arg map[string]interface{}) (*Type, error)
 func (b *Builder) Inject(fns ...interface{}) *Builder {
 	for _, fn := range fns {
-		if err := b.runner.Inject(fn); err != nil {
-			panic(err)
-		}
+		b.runner.Inject(fn)
 	}
 	return b
 }
