@@ -44,6 +44,36 @@ func (b *Builder) Inject(fns ...interface{}) *Builder {
 	return b
 }
 
+// Before 设置运行前拦截函数
+func (b *Builder) Before(fn runjson.BeforeRun) *Builder {
+	b.runner.BeforeRun(fn)
+	return b
+}
+
+// BeforeExecute 设置单个任务运行前拦截函数
+func (b *Builder) BeforeExecute(fn runjson.BeforeExecute) *Builder {
+	b.runner.BeforeExecute(fn)
+	return b
+}
+
+// After 设置运行后拦截函数
+func (b *Builder) After(fn runjson.AfterRun) *Builder {
+	b.runner.AfterRun(fn)
+	return b
+}
+
+// AfterExecute 设置单个任务运行后拦截函数
+func (b *Builder) AfterExecute(fn runjson.AfterExecute) *Builder {
+	b.runner.AfterExecute(fn)
+	return b
+}
+
+// ErrorHandler 设置错误信息拦截函数
+func (b *Builder) ErrorHandler(fn runjson.OnError) *Builder {
+	b.runner.ErrorHandler(fn)
+	return b
+}
+
 //InjectProxy 注册注入函数 func(ctx inject.Context) (*Type, error)
 //此注入，可以直接获得 http.Request 以及 http.ResponseWriter
 //func (b *Builder) InjectProxy(fns ...interface{}) error {

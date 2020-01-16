@@ -3,6 +3,8 @@ package rjhttp
 import (
 	"net/http"
 
+	"github.com/seerx/runjson"
+
 	"github.com/seerx/runjson/pkg/rj"
 )
 
@@ -24,17 +26,30 @@ func Inject(fns ...interface{}) *Builder {
 	return instance
 }
 
-//InjectProxy 注册注入函数 func(ctx inject.Context) (*Type, error)
-//此注入，可以直接获得 http.Request 以及 http.ResponseWriter
-//func (b *Builder) InjectProxy(fns ...interface{}) error {
-//	for _, fn := range fns {
-//		if err := inject.Proxy(b.runner, fn); err != nil {
-//			return err
-//		}
-//	}
-//
-//	return nil
-//}
+// Before 设置运行前拦截函数
+func Before(fn runjson.BeforeRun) *Builder {
+	return instance.Before(fn)
+}
+
+// BeforeExecute 设置单个任务运行前拦截函数
+func BeforeExecute(fn runjson.BeforeExecute) *Builder {
+	return instance.BeforeExecute(fn)
+}
+
+// After 设置运行后拦截函数
+func After(fn runjson.AfterRun) *Builder {
+	return instance.After(fn)
+}
+
+// AfterExecute 设置单个任务运行后拦截函数
+func AfterExecute(fn runjson.AfterExecute) *Builder {
+	return instance.AfterExecute(fn)
+}
+
+// ErrorHandler 设置错误信息拦截函数
+func ErrorHandler(fn runjson.OnError) *Builder {
+	return instance.ErrorHandler(fn)
+}
 
 // EnableUpload 允许上传文件，可能影响性能，如非必要，请谨慎使用
 // enable == true 时，可以使用 *runj.Upload 作为业务处理函数的参数
