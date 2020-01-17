@@ -19,9 +19,7 @@ func Register(loaders ...rj.Loader) *Builder {
 // Inject 注册注入函数 func(arg map[string]interface{}) (*Type, error)
 func Inject(fns ...interface{}) *Builder {
 	for _, fn := range fns {
-		if err := instance.Inject(fn); err != nil {
-			panic(err)
-		}
+		instance.Inject(fn)
 	}
 	return instance
 }
