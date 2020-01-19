@@ -3,6 +3,8 @@ Vue.component("runner", {
         return {
             rootUrl: '',
             title: '',
+            tokenField: '',
+            tokenValue: '',
             root: null,
             rootIsArray: false,
             tree: null,
@@ -17,6 +19,10 @@ Vue.component("runner", {
     mounted() {
     },
     methods: {
+        setToken(field, value) {
+            this.tokenField = field
+            this.tokenValue = value
+        },
         init (rootUrl, serviceName, objectTree, rootObjectId, rootIsArray) {
             this.rootUrl = rootUrl
             this.title = serviceName
@@ -78,6 +84,11 @@ Vue.component("runner", {
             }
             return res
         },
+        headers() {
+            let h = {}
+            h[this.tokenField] = this.tokenValue
+            return h
+        },
         upload () {
             if (this.file === '') {
                 this.$message({
@@ -91,7 +102,7 @@ Vue.component("runner", {
         doUpload () {
             this.requestCount ++
             const file = this.$refs.file.files[0];
-            const ajax = new Ajax(this.rootUrl)
+            const ajax = new Ajax(this.rootUrl, this.headers())
             ajax.Upload(this.json, file, this.file).then(res => {
                 this.complete = true
                 let json = JSON.parse(res)
@@ -111,7 +122,7 @@ Vue.component("runner", {
         },
         get () {
             this.requestCount ++
-            let ajax = new Ajax(this.rootUrl)
+            let ajax = new Ajax(this.rootUrl, this.headers())
             ajax.Get(this.json).then(res => {
                 this.complete = true
                 let json = JSON.parse(res)
@@ -127,7 +138,7 @@ Vue.component("runner", {
         },
         post () {
             this.requestCount ++
-            let ajax = new Ajax(this.rootUrl)
+            let ajax = new Ajax(this.rootUrl, this.headers())
             ajax.Post(this.json).then(res => {
                 this.complete = true
                 let json = JSON.parse(res)
