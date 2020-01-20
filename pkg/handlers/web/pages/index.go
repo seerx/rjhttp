@@ -11,11 +11,18 @@ const IndexContext = `
 <body>
     <div id="app">
         <el-container>
-            <el-header>
-                <a class="logo" href="https://github.com/seerx/runjson">
-                    <img src="https://raw.githubusercontent.com/seerx/runjson/master/resources/logo.png">
-                    <span>Run JSON</span>
-                </a>
+            <el-header style="display: flex;">
+                <div style="width: 260px;">
+                    <a class="logo" href="https://github.com/seerx/rjhttp">
+                        <img src="https://raw.githubusercontent.com/seerx/runjson/master/resources/logo.png">
+                        <span>Run JSON</span>
+                    </a>
+                </div>
+                <div style="width: calc(100% - 260px);" style="display: flex; align-content: center; align-items: center; height: 100%;">
+                    <el-button type="primary" @click="inputToken"
+                               style="padding: 6px; margin: 5px;">Token</el-button>
+                    <span style="">{{ tokenInfo }}</span>
+                </div>
             </el-header>
             <el-container>
                 <el-aside width="260px" class="list">
@@ -54,6 +61,20 @@ const IndexContext = `
                 </el-main>
             </el-container>
         </el-container>
+		<el-dialog title="Token" :visible.sync="tokenFormVisible">
+            <el-form>
+                <el-form-item label="Token field" :label-width="50">
+                    <el-input v-model="tokenKeyInput" autocomplete="off"></el-input>
+                </el-form-item>
+                <el-form-item label="Token" :label-width="50">
+                    <el-input v-model="tokenValueInput" autocomplete="off"></el-input>
+                </el-form-item>
+            </el-form>
+            <div slot="footer" class="dialog-footer">
+                <el-button @click="tokenFormVisible = false">取 消</el-button>
+                <el-button type="primary" @click="setToken">确 定</el-button>
+            </div>
+        </el-dialog>
     </div>
 </body>
 <!-- import Vue before Element -->
@@ -76,6 +97,12 @@ const IndexContext = `
                 current: null,
                 list:[1,2,3,4],
                 data: [],
+				tokenInfo: '',
+                tokenKey: '',
+                tokenValue: '',
+                tokenKeyInput: '',
+                tokenValueInput: '',
+                tokenFormVisible: false,
                 request: {
                     rootNode: null,
                     resolve: null
@@ -102,6 +129,17 @@ const IndexContext = `
             })
         },
         methods: {
+			inputToken() {
+                this.tokenFormVisible = true
+            },
+            setToken() {
+                this.tokenKey = this.tokenKeyInput
+                this.tokenValue = this.tokenValueInput
+                this.tokenInfo = this.tokenKey + ": " + this.tokenValue
+                this.tokenFormVisible = false
+
+                this.$refs.runner.setToken(this.tokenKey, this.tokenValue)
+            },
             initParam () {
                 let isAry = this.current['inputIsArray']
                 let objId = this.current['inputObjectId']

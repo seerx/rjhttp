@@ -1,15 +1,21 @@
 package pages
 
 const AjaxContent = `
-function Ajax(rootUrl) {
+function Ajax(rootUrl, headers) {
     let self = this
     self.root = rootUrl
+    self.headers = headers
 
     this.Upload = function (param, file, fieldName) {
         return new Promise(function(resolve, reject) {
             let xhr = new XMLHttpRequest()
             xhr.open("POST", self.root, true)
             // xhr.setRequestHeader('Content-type', 'multipart/form-data');
+            if (self.headers) {
+                for (let k in self.headers) {
+                    xhr.setRequestHeader(k, self.headers[k]);
+                }
+            }
             xhr.setRequestHeader('--run-json-field--', 'body');
             xhr.onreadystatechange = function () {
                 if (xhr.readyState == 4 && xhr.status == 200) {
@@ -35,6 +41,11 @@ function Ajax(rootUrl) {
             let xhr = new XMLHttpRequest()
             let url = self.root + '?' + param
             xhr.open("GET", url, true)
+            if (self.headers) {
+                for (let k in self.headers) {
+                    xhr.setRequestHeader(k, self.headers[k]);
+                }
+            }
             xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
             xhr.onreadystatechange = function () {
                 if (xhr.readyState == 4 && xhr.status == 200) {
@@ -58,6 +69,11 @@ function Ajax(rootUrl) {
             let xhr = new XMLHttpRequest()
             // let url = self.root + '?' + param
             xhr.open("POST", self.root, true)
+            if (self.headers) {
+                for (let k in self.headers) {
+                    xhr.setRequestHeader(k, self.headers[k]);
+                }
+            }
             xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
             xhr.onreadystatechange = function () {
                 if (xhr.readyState == 4 && xhr.status == 200) {

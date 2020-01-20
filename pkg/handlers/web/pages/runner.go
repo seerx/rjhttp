@@ -10,6 +10,8 @@ Vue.component("runner", {
             title: '',
             root: null,
             rootIsArray: false,
+			tokenField: '',
+            tokenValue: '',
             tree: null,
             json: '',
             response: '',
@@ -22,6 +24,10 @@ Vue.component("runner", {
     mounted() {
     },
     methods: {
+		setToken(field, value) {
+            this.tokenField = field
+            this.tokenValue = value
+        },
         init (rootUrl, serviceName, objectTree, rootObjectId, rootIsArray) {
             this.rootUrl = rootUrl
             this.title = serviceName
@@ -83,6 +89,17 @@ Vue.component("runner", {
             }
             return res
         },
+		headers() {
+            if (! this.tokenField || !this.tokenValue) {
+                return null
+            }
+            if (this.tokenField === '') {
+                return null
+            }
+            let h = {}
+            h[this.tokenField] = this.tokenValue
+            return h
+        },
         upload () {
             if (this.file === '') {
                 this.$message({
@@ -96,7 +113,7 @@ Vue.component("runner", {
         doUpload () {
             this.requestCount ++
             const file = this.$refs.file.files[0];
-            const ajax = new Ajax(this.rootUrl)
+            const ajax = new Ajax(this.rootUrl, this.headers())
             ajax.Upload(this.json, file, this.file).then(res => {
                 this.complete = true
                 let json = JSON.parse(res)
@@ -116,7 +133,7 @@ Vue.component("runner", {
         },
         get () {
             this.requestCount ++
-            let ajax = new Ajax(this.rootUrl)
+            let ajax = new Ajax(this.rootUrl, this.headers())
             ajax.Get(this.json).then(res => {
                 this.complete = true
                 let json = JSON.parse(res)
@@ -132,7 +149,7 @@ Vue.component("runner", {
         },
         post () {
             this.requestCount ++
-            let ajax = new Ajax(this.rootUrl)
+            let ajax = new Ajax(this.rootUrl, this.headers())
             ajax.Post(this.json).then(res => {
                 this.complete = true
                 let json = JSON.parse(res)

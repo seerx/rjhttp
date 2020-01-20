@@ -85,6 +85,12 @@ Vue.component("runner", {
             return res
         },
         headers() {
+            if (! this.tokenField || !this.tokenValue) {
+                return null
+            }
+            if (this.tokenField === '') {
+                return null
+            }
             let h = {}
             h[this.tokenField] = this.tokenValue
             return h

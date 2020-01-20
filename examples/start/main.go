@@ -15,7 +15,8 @@ func init() {
 	rjhttp.EnableWebClient(true).
 		EnableUpload(true).
 		Inject(InjectResponse).
-		Register(&demo.Demo1{})
+		Register(&demo.Demo1{}).
+		DisableWebFileDebug()
 }
 
 func InjectResponse(arg map[string]interface{}) (http.ResponseWriter, error) {
