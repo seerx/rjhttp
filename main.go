@@ -3,6 +3,8 @@ package rjhttp
 import (
 	"net/http"
 
+	"github.com/seerx/runjson/pkg/context"
+
 	"github.com/seerx/runjson"
 
 	"github.com/seerx/runjson/pkg/rj"
@@ -22,6 +24,10 @@ func Inject(fns ...interface{}) *Builder {
 		instance.Inject(fn)
 	}
 	return instance
+}
+
+func SetLogger(log context.Log) *Builder {
+	return instance.SetLogger(log)
 }
 
 // Before 设置运行前拦截函数

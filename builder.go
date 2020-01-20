@@ -3,6 +3,8 @@ package rjhttp
 import (
 	"net/http"
 
+	"github.com/seerx/runjson/pkg/context"
+
 	"github.com/seerx/runjson/pkg/rj"
 
 	"github.com/seerx/rjhttp/pkg/handlers/runj"
@@ -69,6 +71,12 @@ func (b *Builder) AfterExecute(fn runjson.AfterExecute) *Builder {
 // ErrorHandler 设置错误信息拦截函数
 func (b *Builder) ErrorHandler(fn runjson.OnError) *Builder {
 	b.runner.ErrorHandler(fn)
+	return b
+}
+
+// SetLogger 设置日志输出
+func (b *Builder) SetLogger(log context.Log) *Builder {
+	b.runner.SetLogger(log)
 	return b
 }
 
