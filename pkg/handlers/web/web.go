@@ -23,8 +23,8 @@ func NewHandler(runner *runjson.Runner, opt *option.Option) *Handler {
 			"graph": &GraphHandler{
 				runner: runner,
 			},
-			"index": &Index{opt.WebDebug},
-			"file":  &File{opt.WebDebug},
+			"index": &Index{},
+			"file":  &File{},
 		},
 	}
 }
@@ -40,7 +40,8 @@ func (w *Handler) ServeHTTP(writer http.ResponseWriter, request *http.Request) {
 	method := parseWebParam(request)
 	if method == "" {
 		if request.Method == http.MethodGet {
-			if request.URL.RawQuery == "" {
+			token := request.URL.Query().Get("tokenfield")
+			if request.URL.RawQuery == "" || token != "" {
 				w.hanlderMap["index"].ServeHTTP(writer, request)
 				return
 			}

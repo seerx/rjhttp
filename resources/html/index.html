@@ -118,6 +118,15 @@
         },
         mounted () {
             loc = document.location
+
+            let field = this.getParameter(loc.search, 'tokenfield')
+            let value = this.getParameter(loc.search, 'tokenvalue')
+            if (field && field != '') {
+                this.$nextTick(() => {
+                    this.setTokenPairs(field, value)
+                })
+            }
+
             this.rootUrl = loc.pathname
             let ajax = new Ajax(this.rootUrl)
             ajax.Get('m=graph').then(res => {
@@ -131,11 +140,17 @@
                 this.tokenFormVisible = true
             },
             setToken() {
-                this.tokenKey = this.tokenKeyInput
-                this.tokenValue = this.tokenValueInput
-                this.tokenInfo = this.tokenKey + ": " + this.tokenValue
+                // this.tokenKey = this.tokenKeyInput
+                // this.tokenValue = this.tokenValueInput
+                // this.tokenInfo = this.tokenKey + ": " + this.tokenValue
                 this.tokenFormVisible = false
-
+                this.setTokenPairs(this.tokenKeyInput, this.tokenValueInput)
+                // this.$refs.runner.setToken(this.tokenKey, this.tokenValue)
+            },
+            setTokenPairs(field, value) {
+                this.tokenKey = field
+                this.tokenValue = value
+                this.tokenInfo = field + ": " + value
                 this.$refs.runner.setToken(this.tokenKey, this.tokenValue)
             },
             initParam () {
@@ -155,6 +170,13 @@
                     info['outputIsArray'],
                     false,
                     this.data['response'])
+            },
+            getParameter (queryUrl, param) {
+                var re = new RegExp (param + "=([^\&]*)" , "i")
+                var a = re.exec (queryUrl)
+                if (a == null)
+                    return null
+                return a [1];
             }
         }
     })

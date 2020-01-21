@@ -118,12 +118,6 @@ func (b *Builder) EnableWebClient(enable bool) *Builder {
 	return b
 }
 
-// DisableWebFileDebug 禁止调试 Web 界面文件
-func (b *Builder) DisableWebFileDebug() *Builder {
-	b.option.WebDebug = false
-	return b
-}
-
 // Build 创建 handler
 func (b *Builder) Build() http.Handler {
 	var h http.Handler

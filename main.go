@@ -78,11 +78,6 @@ func EnableWebClient(enable bool) *Builder {
 	return instance.EnableWebClient(enable)
 }
 
-// DisableWebFileDebug 禁止调试 Web 界面文件
-func DisableWebFileDebug() *Builder {
-	return instance.DisableWebFileDebug()
-}
-
 // Build 创建 handler
 func Build() http.Handler {
 	return instance.Build()

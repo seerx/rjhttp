@@ -10,7 +10,6 @@ import (
 
 // Index Web 首页
 type Index struct {
-	debug bool
 }
 
 func returnFile(writer http.ResponseWriter, fileName string) {
@@ -29,11 +28,17 @@ func returnFile(writer http.ResponseWriter, fileName string) {
 func (i *Index) ServeHTTP(writer http.ResponseWriter, request *http.Request) {
 	writer.Header().Add("Content-Type", "text/html")
 
-	if i.debug {
-		// 调试页面
-		returnFile(writer, "./resources/html/index.html")
+	//if i.debug {
+	//	// 调试页面
+	//	returnFile(writer, "./resources/html/index.html")
+	//	return
+	//}
+
+	data, err := pages.Asset("index.html")
+	if err != nil {
+		writer.WriteHeader(http.StatusNotFound)
 		return
 	}
 
-	writer.Write([]byte(pages.IndexContext))
+	writer.Write(data)
 }
