@@ -4,9 +4,9 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/seerx/rjhttp"
+	"github.com/seerx/rjhttp/pkg/rjh"
 
-	"github.com/seerx/rjhttp/internal/handlers/runj"
+	"github.com/seerx/rjhttp"
 
 	"github.com/seerx/rjhttp/examples/start/demo"
 )
@@ -20,11 +20,11 @@ func init() {
 }
 
 func InjectResponse(arg map[string]interface{}) (http.ResponseWriter, error) {
-	return runj.ParseWriter(arg), nil
+	return rjh.ParseWriter(arg), nil
 }
 
 func InjectRequest(arg map[string]interface{}) (*http.Request, error) {
-	return runj.ParseRequest(arg), nil
+	return rjh.ParseRequest(arg), nil
 }
 
 func main() {

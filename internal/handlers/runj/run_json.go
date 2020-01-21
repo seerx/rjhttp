@@ -127,9 +127,9 @@ func (r *RjHandler) ServeHTTP(writer http.ResponseWriter, request *http.Request)
 		response, err := r.Runner.RunRequests(&context.Context{
 			Context: context2.Background(),
 			Param: map[string]interface{}{
-				RequestField: request,
-				WriterField:  writer,
-				MaxSizeField: r.Option.UploadMaxBytes,
+				rjh.RequestField: request,
+				rjh.WriterField:  writer,
+				rjh.MaxSizeField: r.Option.UploadMaxBytes,
 			},
 		}, reqs)
 		if err != nil {
