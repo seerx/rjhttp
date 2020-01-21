@@ -56,8 +56,8 @@ func (u *Upload) ReadFile(field string) ([]byte, *multipart.FileHeader, error) {
 	return data, fh, nil
 }
 
-// InjectUpload 上传辅助类注入函数
-func InjectUpload(arg map[string]interface{}) (*Upload, error) {
+// injectUpload 上传辅助类注入函数
+func injectUpload(arg map[string]interface{}) (*Upload, error) {
 	request := ParseRequest(arg)
 	//writer := ParseWriter(arg)
 	//maxSize := ParseUploadMaxSize(arg)

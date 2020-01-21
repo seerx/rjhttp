@@ -3,7 +3,7 @@ package web
 import (
 	"net/http"
 
-	"github.com/seerx/rjhttp/pkg/handlers/web/pages"
+	"github.com/seerx/rjhttp/internal/handlers/web/pages"
 )
 
 // BASE HTML 文件路径

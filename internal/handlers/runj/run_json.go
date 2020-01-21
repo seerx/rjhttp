@@ -8,6 +8,8 @@ import (
 	"net/url"
 	"strings"
 
+	"github.com/seerx/rjhttp/pkg/rjh"
+
 	"github.com/seerx/runjson/pkg/context"
 
 	"github.com/seerx/runjson/pkg/rj"
@@ -28,7 +30,7 @@ type RjHandler struct {
 func NewRjHandler(runner *runjson.Runner, opt *option.Option) *RjHandler {
 	if opt.EnableUpload {
 		// 注入上传文件操作结构体
-		if err := runner.Inject(InjectUpload); err != nil {
+		if err := runner.Inject(injectUpload); err != nil {
 			panic(err)
 		}
 		// 可以上传文件
@@ -140,7 +142,7 @@ func (r *RjHandler) ServeHTTP(writer http.ResponseWriter, request *http.Request)
 				for _, obj := range response {
 					// 如果返回的是 RjBinary 对象，说明在业务逻辑函数内部已经处理了 writer 操作
 					// 此处不再需要返回任何信息，直接 return
-					if IsBinary(obj) {
+					if rjh.IsBinary(obj) {
 						// 不做返回操作
 						return
 					}

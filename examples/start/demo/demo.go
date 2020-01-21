@@ -1,11 +1,14 @@
 package demo
 
 import (
+	"fmt"
 	"io/ioutil"
 	"net/http"
 	"os"
 
-	"github.com/seerx/rjhttp/pkg/handlers/runj"
+	"github.com/seerx/rjhttp/pkg/rjh"
+
+	"github.com/seerx/rjhttp/internal/handlers/runj"
 	"github.com/seerx/runjson/pkg/rj"
 )
 
@@ -74,8 +77,18 @@ func (d Demo1) TestUpload(upload *runj.Upload) (string, error) {
 	return "ok", nil
 }
 
-func (d Demo1) TestImage(writer http.ResponseWriter) (*runj.RjBinary, error) {
-	writer.Header().Add("Content-Type", "image/jpeg")
+func (d Demo1) TestDownload(writer http.ResponseWriter, request *http.Request) (*rjh.RjBinary, error) {
+	for k, v := range request.Header {
+		fmt.Printf("%s=%s\n", k, v[0])
+	}
+	rjh.SetResponseDownload(writer, "test.go")
+	http.ServeFile(writer, request, "/Users/dotjava/workspace/go-projects/rjhttp/main.go")
+	return nil, nil
+}
+
+func (d Demo1) TestImage(writer http.ResponseWriter) (*rjh.RjBinary, error) {
+	//writer.Header().Add("Content-Type", "image/jpeg")
+	rjh.SetResponseImage(writer)
 	file, err := os.Open("/Users/dotjava/workspace/go-projects/collection/data/images/anping/andianyafan/c1/2019_07_27-2019_07_27/10.10.16.18_01_20190727191212326_TIMING.jpg")
 	if err != nil {
 		return nil, err
@@ -86,6 +99,7 @@ func (d Demo1) TestImage(writer http.ResponseWriter) (*runj.RjBinary, error) {
 		return nil, err
 	}
 	writer.Write(data)
+
 	//writer
-	return &runj.RjBinary{}, nil
+	return &rjh.RjBinary{}, nil
 }

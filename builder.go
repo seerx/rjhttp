@@ -7,9 +7,9 @@ import (
 
 	"github.com/seerx/runjson/pkg/rj"
 
-	"github.com/seerx/rjhttp/pkg/handlers/runj"
+	"github.com/seerx/rjhttp/internal/handlers/runj"
 
-	"github.com/seerx/rjhttp/pkg/handlers/web"
+	"github.com/seerx/rjhttp/internal/handlers/web"
 
 	"github.com/seerx/runjson"
 

@@ -6,7 +6,7 @@ import (
 
 	"github.com/seerx/rjhttp"
 
-	"github.com/seerx/rjhttp/pkg/handlers/runj"
+	"github.com/seerx/rjhttp/internal/handlers/runj"
 
 	"github.com/seerx/rjhttp/examples/start/demo"
 )
@@ -15,11 +15,16 @@ func init() {
 	rjhttp.EnableWebClient(true).
 		EnableUpload(true).
 		Inject(InjectResponse).
+		Inject(InjectRequest).
 		Register(&demo.Demo1{})
 }
 
 func InjectResponse(arg map[string]interface{}) (http.ResponseWriter, error) {
 	return runj.ParseWriter(arg), nil
+}
+
+func InjectRequest(arg map[string]interface{}) (*http.Request, error) {
+	return runj.ParseRequest(arg), nil
 }
 
 func main() {

@@ -14,6 +14,6 @@ cd ../resources/html/
 
 echo "go-bindata"
 
-go-bindata -pkg=pages -ignore=.idea -o ../../pkg/handlers/web/pages/static.go ./...
+go-bindata -pkg=pages -ignore=.idea -o ../../internal/handlers/web/pages/static.go ./...
 
 #cd $cur

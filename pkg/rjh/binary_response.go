@@ -1,6 +1,7 @@
-package runj
+package rjh
 
 import (
+	"net/http"
 	"reflect"
 )
 
@@ -18,4 +19,18 @@ func IsBinary(obj interface{}) bool {
 		return typ.Elem() == binType
 	}
 	return typ == binType
+}
+
+const (
+	contentType        = "Content-Type"
+	contentDisposition = "content-disposition"
+)
+
+func SetResponseImage(writer http.ResponseWriter) {
+	writer.Header().Add(contentType, "image/*")
+}
+
+func SetResponseDownload(writer http.ResponseWriter, filename string) {
+	writer.Header().Set(contentType, "application/octet-stream")
+	writer.Header().Set(contentDisposition, "attachment;filename="+filename)
 }

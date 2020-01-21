@@ -5,7 +5,7 @@ import (
 	"net/http"
 	"os"
 
-	"github.com/seerx/rjhttp/pkg/handlers/web/pages"
+	"github.com/seerx/rjhttp/internal/handlers/web/pages"
 )
 
 // Index Web 首页

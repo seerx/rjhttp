@@ -3,7 +3,7 @@ package web
 import (
 	"net/http"
 
-	"github.com/seerx/rjhttp/pkg/handlers/runj"
+	"github.com/seerx/rjhttp/internal/handlers/runj"
 	"github.com/seerx/runjson"
 
 	"github.com/seerx/rjhttp/pkg/option"

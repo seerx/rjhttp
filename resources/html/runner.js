@@ -9,6 +9,7 @@ Vue.component("runner", {
             rootIsArray: false,
             tree: null,
             json: '',
+            link: '',
             response: '',
             complete: false,
             success: false,
@@ -123,8 +124,17 @@ Vue.component("runner", {
             })
         },
         open() {
-            // this.requestCount ++
-            window.open(this.rootUrl + '?' + this.json, '_blank')
+            this.requestCount ++
+            let ajax = new Ajax(this.rootUrl, this.headers())
+            ajax.GetX(this.json).then(res => {
+                this.complete = true
+                this.success = true
+                console.log('Ok')
+            }).catch(err => {
+                this.complete = true
+                this.success = false
+                this.response = err
+            })
         },
         get () {
             this.requestCount ++
@@ -166,7 +176,7 @@ Vue.component("runner", {
 '></el-button>    
                         <el-button title='POST' v-if="json!==''" @click="post" class='btn' type='primary' icon='el-icon-video-play
 '></el-button>
-                        
+                        <a ref="link" target="_blank" :href="link" style="display: none;"></a>
                         <el-button title='OPEN' v-if="json!==''" @click="open" class='btn' type='info' icon='el-icon-link
 '></el-button>
                         <el-button title='UPLOAD' v-if="json!==''" @click="upload" class='upload btn' type='warning' icon='el-icon-upload
