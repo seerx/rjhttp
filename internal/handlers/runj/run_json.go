@@ -26,11 +26,20 @@ type RjHandler struct {
 	parseFn func(request *http.Request, maxSize int64) (rj.Requests, error)
 }
 
+// injectUpload 上传辅助类注入函数
+func injectUpload(arg map[string]interface{}) (*rjh.Upload, error) {
+	request := rjh.ParseRequest(arg)
+	//writer := ParseWriter(arg)
+	//maxSize := ParseUploadMaxSize(arg)
+	//request.Body = http.MaxBytesReader(writer, request.Body, maxSize)
+	return &rjh.Upload{Request: request}, nil
+}
+
 // NewRjHandler 创建 runjson handler
 func NewRjHandler(runner *runjson.Runner, opt *option.Option) *RjHandler {
 	if opt.EnableUpload {
 		// 注入上传文件操作结构体
-		if err := runner.Inject(rjh.injectUpload); err != nil {
+		if err := runner.Inject(injectUpload); err != nil {
 			panic(err)
 		}
 		// 可以上传文件

@@ -8,7 +8,7 @@ import (
 )
 
 type Upload struct {
-	request *http.Request
+	Request *http.Request
 }
 
 // StoreFile 存储文件
@@ -42,7 +42,7 @@ func (u *Upload) StoreFileX(storePath string, field string, confirmFn func(*mult
 
 // ReadFile 读取文件内容
 func (u *Upload) ReadFile(field string) ([]byte, *multipart.FileHeader, error) {
-	mFile, fh, err := u.request.FormFile(field)
+	mFile, fh, err := u.Request.FormFile(field)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -54,13 +54,4 @@ func (u *Upload) ReadFile(field string) ([]byte, *multipart.FileHeader, error) {
 		return nil, fh, err
 	}
 	return data, fh, nil
-}
-
-// injectUpload 上传辅助类注入函数
-func injectUpload(arg map[string]interface{}) (*Upload, error) {
-	request := ParseRequest(arg)
-	//writer := ParseWriter(arg)
-	//maxSize := ParseUploadMaxSize(arg)
-	//request.Body = http.MaxBytesReader(writer, request.Body, maxSize)
-	return &Upload{request: request}, nil
 }
