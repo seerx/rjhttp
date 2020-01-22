@@ -8,7 +8,6 @@ import (
 
 	"github.com/seerx/rjhttp/pkg/rjh"
 
-	"github.com/seerx/rjhttp/internal/handlers/runj"
 	"github.com/seerx/runjson/pkg/rj"
 )
 
@@ -70,7 +69,7 @@ func (d Demo1) TestUploadInfo() rj.FuncInfo {
 	}
 }
 
-func (d Demo1) TestUpload(upload *runj.Upload) (string, error) {
+func (d Demo1) TestUpload(upload *rjh.Upload) (string, error) {
 	if err := upload.StoreFile("./test", "file"); err != nil {
 		return "Error", err
 	}

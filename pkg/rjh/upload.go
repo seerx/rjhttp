@@ -1,12 +1,10 @@
-package runj
+package rjh
 
 import (
 	"io/ioutil"
 	"mime/multipart"
 	"net/http"
 	"os"
-
-	"github.com/seerx/rjhttp/pkg/rjh"
 )
 
 type Upload struct {
@@ -60,7 +58,7 @@ func (u *Upload) ReadFile(field string) ([]byte, *multipart.FileHeader, error) {
 
 // injectUpload 上传辅助类注入函数
 func injectUpload(arg map[string]interface{}) (*Upload, error) {
-	request := rjh.ParseRequest(arg)
+	request := ParseRequest(arg)
 	//writer := ParseWriter(arg)
 	//maxSize := ParseUploadMaxSize(arg)
 	//request.Body = http.MaxBytesReader(writer, request.Body, maxSize)

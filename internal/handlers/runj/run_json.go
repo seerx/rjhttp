@@ -30,7 +30,7 @@ type RjHandler struct {
 func NewRjHandler(runner *runjson.Runner, opt *option.Option) *RjHandler {
 	if opt.EnableUpload {
 		// 注入上传文件操作结构体
-		if err := runner.Inject(injectUpload); err != nil {
+		if err := runner.Inject(rjh.injectUpload); err != nil {
 			panic(err)
 		}
 		// 可以上传文件
