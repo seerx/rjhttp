@@ -7,7 +7,7 @@ import (
 
 // RjBinary 返回二进制文件(含图片)时，返回直结构
 type RjBinary struct {
-	Binary string `json:"binary" rj:"desc:返回二进制数据，由处理函数直接调用 http.ResponseWriter.Write(...) 来返回数据"`
+	Binary string `json:"binary" rj:"desc:Return binary data, for example: http.ResponseWriter.Write(...)"`
 }
 
 var binType = reflect.TypeOf((*RjBinary)(nil)).Elem()
