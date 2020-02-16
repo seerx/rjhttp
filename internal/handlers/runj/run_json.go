@@ -138,7 +138,7 @@ func (r *RjHandler) ServeHTTP(writer http.ResponseWriter, request *http.Request)
 			Param: map[string]interface{}{
 				rjh.RequestField: request,
 				rjh.WriterField:  writer,
-				rjh.ExtraField:   res,
+				rjh.ExtraField:   &res,
 				rjh.MaxSizeField: r.Option.UploadMaxBytes,
 			},
 		}, reqs)
