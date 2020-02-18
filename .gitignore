@@ -4,3 +4,9 @@ resources/html/.idea/modules.xml
 resources/html/.idea/vcs.xml
 examples/start/debug
 go.sum
+.idea/misc.xml
+.idea/modules.xml
+.idea/rjhttp.iml
+.idea/vcs.xml
+.idea/watcherTasks.xml
+resources/html/.idea/.gitignore

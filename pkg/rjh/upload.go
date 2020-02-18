@@ -7,6 +7,7 @@ import (
 	"os"
 )
 
+// Upload 上传对象
 type Upload struct {
 	Request *http.Request
 }

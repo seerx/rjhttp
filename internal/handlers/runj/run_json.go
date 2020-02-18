@@ -29,14 +29,20 @@ type RjHandler struct {
 // injectUpload 上传辅助类注入函数
 func injectUpload(arg map[string]interface{}) (*rjh.Upload, error) {
 	request := rjh.ParseRequest(arg)
-	//writer := ParseWriter(arg)
-	//maxSize := ParseUploadMaxSize(arg)
-	//request.Body = http.MaxBytesReader(writer, request.Body, maxSize)
 	return &rjh.Upload{Request: request}, nil
+}
+
+func injectExtra(arg map[string]interface{}) (rjh.Extra, error) {
+	extra := rjh.ParseExtra(arg)
+	return extra, nil
 }
 
 // NewRjHandler 创建 runjson handler
 func NewRjHandler(runner *runjson.Runner, opt *option.Option) *RjHandler {
+	// 注入额外数据提供者
+	if err := runner.Inject(injectExtra); err != nil {
+		panic(err)
+	}
 	if opt.EnableUpload {
 		// 注入上传文件操作结构体
 		if err := runner.Inject(injectUpload); err != nil {

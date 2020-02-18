@@ -26,10 +26,12 @@ const (
 	contentDisposition = "content-disposition"
 )
 
+// SetResponseImage 设置返回类型为图片
 func SetResponseImage(writer http.ResponseWriter) {
 	writer.Header().Add(contentType, "image/*")
 }
 
+// SetResponseDownload 设置返回类型为二进制
 func SetResponseDownload(writer http.ResponseWriter, filename string) {
 	writer.Header().Set(contentType, "application/octet-stream")
 	writer.Header().Set(contentDisposition, "attachment;filename="+filename)

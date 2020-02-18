@@ -31,6 +31,7 @@ func ParseUploadMaxSize(injectArg map[string]interface{}) int64 {
 	return injectArg[MaxSizeField].(int64)
 }
 
-func ParseExtraWriter(injectArg map[string]interface{}) ExtraWriter {
-	return injectArg[ExtraField].(ExtraWriter)
+// ParseExtra 解析额外数据管理者
+func ParseExtra(injectArg map[string]interface{}) Extra {
+	return injectArg[ExtraField].(Extra)
 }
