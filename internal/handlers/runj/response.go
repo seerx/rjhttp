@@ -1,8 +1,10 @@
 package runj
 
-import "github.com/seerx/runjson/pkg/rj"
+import (
+	"fmt"
 
-import "fmt"
+	"github.com/seerx/runjson/pkg/rj"
+)
 
 // RjResponse http 返回信息
 type RjResponse struct {
@@ -11,8 +13,8 @@ type RjResponse struct {
 	Data  rj.Response            `json:"data"`
 }
 
-// Write 写入数据
-func (r *RjResponse) Write(key string, data interface{}) {
+// Set 写入数据
+func (r *RjResponse) Set(key string, data interface{}) {
 	if r.Extra == nil {
 		r.Extra = map[string]interface{}{}
 	}

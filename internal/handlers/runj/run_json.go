@@ -37,10 +37,18 @@ func injectExtra(arg map[string]interface{}) (rjh.Extra, error) {
 	return extra, nil
 }
 
+func injectShuttlecraft(arg map[string]interface{}) (rjh.Shuttlecraft, error) {
+	return rjh.ParseShuttlecraft(arg), nil
+}
+
 // NewRjHandler 创建 runjson handler
 func NewRjHandler(runner *runjson.Runner, opt *option.Option) *RjHandler {
 	// 注入额外数据提供者
 	if err := runner.Inject(injectExtra); err != nil {
+		panic(err)
+	}
+	// 注入数据传送者
+	if err := runner.Inject(injectShuttlecraft); err != nil {
 		panic(err)
 	}
 	if opt.EnableUpload {
