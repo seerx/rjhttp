@@ -92,13 +92,12 @@ func AssetNames() []string {
 
 // _bindata is a table, holding each asset generator, mapped to its name.
 var _bindata = map[string]func() ([]byte, error){
-	"ajax.js":    ajax_js,
+	"ajax.js": ajax_js,
 	"index.html": index_html,
-	"logo.png":   logo_png,
+	"logo.png": logo_png,
 	"objects.js": objects_js,
-	"runner.js":  runner_js,
+	"runner.js": runner_js,
 }
-
 // AssetDir returns the file names below a certain
 // directory embedded in the file by go-bindata.
 // For example if you run go-bindata on data/... and data contains the
@@ -135,14 +134,18 @@ func AssetDir(name string) ([]string, error) {
 }
 
 type _bintree_t struct {
-	Func     func() ([]byte, error)
+	Func func() ([]byte, error)
 	Children map[string]*_bintree_t
 }
-
 var _bintree = &_bintree_t{nil, map[string]*_bintree_t{
-	"ajax.js":    &_bintree_t{ajax_js, map[string]*_bintree_t{}},
-	"index.html": &_bintree_t{index_html, map[string]*_bintree_t{}},
-	"logo.png":   &_bintree_t{logo_png, map[string]*_bintree_t{}},
-	"objects.js": &_bintree_t{objects_js, map[string]*_bintree_t{}},
-	"runner.js":  &_bintree_t{runner_js, map[string]*_bintree_t{}},
+	"ajax.js": &_bintree_t{ajax_js, map[string]*_bintree_t{
+	}},
+	"index.html": &_bintree_t{index_html, map[string]*_bintree_t{
+	}},
+	"logo.png": &_bintree_t{logo_png, map[string]*_bintree_t{
+	}},
+	"objects.js": &_bintree_t{objects_js, map[string]*_bintree_t{
+	}},
+	"runner.js": &_bintree_t{runner_js, map[string]*_bintree_t{
+	}},
 }}

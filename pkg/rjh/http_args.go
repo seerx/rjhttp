@@ -45,7 +45,7 @@ func ParseShuttlecraft(injectArg map[string]interface{}) Shuttlecraft {
 	val, ok := injectArg[shuttlecraftField]
 	var sc Shuttlecraft
 	if !ok {
-		sc = &shuttlecraft.Shuttlecraft{}
+		sc = shuttlecraft.New()
 		injectArg[shuttlecraftField] = sc
 	} else {
 		sc, _ = val.(Shuttlecraft)
