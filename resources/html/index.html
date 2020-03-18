@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Run JSON</title>
-    <link rel="stylesheet" href="https://unpkg.com/element-ui@2.13.0/lib/theme-chalk/index.css">
+    <link rel="stylesheet" href="?m=file&file=index.css">
 </head>
 <body>
     <div id="app">
@@ -18,11 +18,11 @@
                 <div style="width: calc(100% - 260px);" style="display: flex; align-content: center; align-items: center; height: 100%;">
                     <el-button type="primary" @click="inputToken"
                                style="padding: 6px; margin: 5px;">Token</el-button>
-                    <span style="">{{ tokenInfo }}</span>
+                    <span >{{ tokenInfo }}</span>
                 </div>
             </el-header>
             <el-container>
-                <el-aside width="260px" class="list">
+                <el-aside width="260px" class="api-list">
                     <el-collapse v-model="activeName" accordion>
                         <el-collapse-item v-for="(grp, n) in data['groups']" :title="grp.name + ' > ' + grp.description" :name="n" :key="n">
                             <div class="service" v-for="(svc, n) in grp['services']" :key="n">
@@ -76,9 +76,9 @@
     </div>
 </body>
 <!-- import Vue before Element -->
-<script src="https://unpkg.com/vue@v2.6.11/dist/vue.min.js"></script>
+<script src="?m=file&file=vue.min.js"></script>
 <!-- import JavaScript -->
-<script src="https://unpkg.com/element-ui@2.13.0/lib/index.js"></script>
+<script src="?m=file&file=index.js"></script>
 
 <script src="?m=file&file=objects.js"></script>
 <script src="?m=file&file=runner.js"></script>
@@ -236,16 +236,16 @@
         padding: 2px;
     }
 
-    .list {
+    .api-list {
         overflow: auto;
-        height: 100%;
+        /* height: 100%; */
     }
 
-    .list .el-collapse-item__header {
+    .api-list .el-collapse-item__header {
         padding: 0 0 0 8px !important;
     }
 
-    .list .el-collapse-item__content {
+    .api-list .el-collapse-item__content {
         padding: 0 !important;
         text-align: left;
     }

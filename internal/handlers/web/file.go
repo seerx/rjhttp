@@ -2,6 +2,7 @@ package web
 
 import (
 	"net/http"
+	"strings"
 
 	"github.com/seerx/rjhttp/internal/handlers/web/pages"
 )
@@ -41,6 +42,9 @@ func (i *File) ServeHTTP(writer http.ResponseWriter, request *http.Request) {
 	//	panic(err)
 	//}
 	//writer.Header().Add("Content-Type", "text/html")
+	if strings.HasSuffix(fileName, ".css") {
+		writer.Header().Add("Content-Type", "text/css; charset=utf-8")
+	}
 	writer.Write(data)
 
 }
