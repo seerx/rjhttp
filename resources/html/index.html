@@ -18,7 +18,7 @@
                 <div style="width: calc(100% - 260px);" style="display: flex; align-content: center; align-items: center; height: 100%;">
                     <el-button type="primary" @click="inputToken"
                                style="padding: 6px; margin: 5px;">Token</el-button>
-                    <span >{{ tokenInfo }}</span>
+                    <span style="width: calc(100% - 260px); overflow: hidden;">{{ tokenInfo }}</span>
                 </div>
             </el-header>
             <el-container>
@@ -271,8 +271,8 @@
     /*    line-height: 100%;*/
     /*}*/
 
-    .info {
-    }
+    /* .info {
+    } */
 
     .info>.el-card {
         height: 100%;
@@ -294,9 +294,9 @@
         padding: 8px 12px 8px 12px;
     }
 
-    .info .object {
-        /*width: 100%;*/
-    }
+    /* .info .object {
+        width: 100%;
+    } */
 
     .info .object h4 {
         margin: 6px 0 6px 0;
