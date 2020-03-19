@@ -27,18 +27,18 @@ type RjHandler struct {
 }
 
 // injectUpload 上传辅助类注入函数
-func injectUpload(arg map[string]interface{}) (*rjh.Upload, error) {
-	request := rjh.ParseRequest(arg)
+func injectUpload(arg *rj.InjectArg) (*rjh.Upload, error) {
+	request := rjh.ParseRequest(arg.Args)
 	return &rjh.Upload{Request: request}, nil
 }
 
-func injectExtra(arg map[string]interface{}) (rjh.Extra, error) {
-	extra := rjh.ParseExtra(arg)
+func injectExtra(arg *rj.InjectArg) (rjh.Extra, error) {
+	extra := rjh.ParseExtra(arg.Args)
 	return extra, nil
 }
 
-func injectShuttlecraft(arg map[string]interface{}) (rjh.Shuttlecraft, error) {
-	return rjh.ParseShuttlecraft(arg), nil
+func injectShuttlecraft(arg *rj.InjectArg) (rjh.Shuttlecraft, error) {
+	return rjh.ParseShuttlecraft(arg.Args), nil
 }
 
 // NewRjHandler 创建 runjson handler

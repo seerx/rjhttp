@@ -13,7 +13,7 @@ type GraphHandler struct {
 }
 
 func (g *GraphHandler) ServeHTTP(writer http.ResponseWriter, request *http.Request) {
-	data, err := json.Marshal(g.runner.ApiInfo)
+	data, err := json.Marshal(g.runner.APIInfo)
 	if err != nil {
 		panic(err)
 	}
