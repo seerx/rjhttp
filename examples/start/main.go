@@ -5,6 +5,7 @@ import (
 	"net/http"
 
 	"github.com/seerx/rjhttp/pkg/rjh"
+	"github.com/seerx/runjson/pkg/rj"
 
 	"github.com/seerx/rjhttp"
 
@@ -19,12 +20,14 @@ func init() {
 		Register(&demo.Demo1{})
 }
 
-func InjectResponse(arg map[string]interface{}) (http.ResponseWriter, error) {
-	return rjh.ParseWriter(arg), nil
+// InjectResponse 注入 http.ResponseWriter 函数
+func InjectResponse(arg *rj.InjectArg) (http.ResponseWriter, error) {
+	return rjh.ParseWriter(arg.Args), nil
 }
 
-func InjectRequest(arg map[string]interface{}) (*http.Request, error) {
-	return rjh.ParseRequest(arg), nil
+// InjectRequest 注入 http.Request 函数
+func InjectRequest(arg *rj.InjectArg) (*http.Request, error) {
+	return rjh.ParseRequest(arg.Args), nil
 }
 
 func main() {
