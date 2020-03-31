@@ -164,9 +164,13 @@ func (r *RjHandler) ServeHTTP(writer http.ResponseWriter, request *http.Request)
 			if len(response) == 1 {
 				// 如果是单独的 runjson
 				for _, obj := range response {
+					if len(obj) > 1 { // 如果多于一个请求
+						// 不进行 RjBinary 判断
+						break
+					}
 					// 如果返回的是 RjBinary 对象，说明在业务逻辑函数内部已经处理了 writer 操作
 					// 此处不再需要返回任何信息，直接 return
-					if rjh.IsBinary(obj) {
+					if rjh.IsBinary(obj[0].Data) {
 						// 不做返回操作
 						return
 					}
