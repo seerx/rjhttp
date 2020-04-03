@@ -76,7 +76,7 @@ func (d Demo1) TestUpload(upload *rjh.Upload) (string, error) {
 	return "ok", nil
 }
 
-func (d Demo1) TestDownload(writer http.ResponseWriter, request *http.Request) (*rjh.Binary, error) {
+func (d Demo1) TestDownload(writer http.ResponseWriter, request *http.Request) (*rjh.ResponseBinary, error) {
 	for k, v := range request.Header {
 		fmt.Printf("%s=%s\n", k, v[0])
 	}
@@ -85,7 +85,7 @@ func (d Demo1) TestDownload(writer http.ResponseWriter, request *http.Request) (
 	return nil, nil
 }
 
-func (d Demo1) TestImage(writer http.ResponseWriter) (*rjh.Binary, error) {
+func (d Demo1) TestImage(writer http.ResponseWriter) (*rjh.ResponseBinary, error) {
 	//writer.Header().Add("Content-Type", "image/jpeg")
 	rjh.SetResponseImage(writer)
 	file, err := os.Open("/Users/dotjava/workspace/go-projects/collection/data/images/anping/andianyafan/c1/2019_07_27-2019_07_27/10.10.16.18_01_20190727191212326_TIMING.jpg")
@@ -100,5 +100,5 @@ func (d Demo1) TestImage(writer http.ResponseWriter) (*rjh.Binary, error) {
 	writer.Write(data)
 
 	//writer
-	return &rjh.Binary{}, nil
+	return &rjh.ResponseBinary{}, nil
 }

@@ -5,16 +5,18 @@ import (
 	"reflect"
 )
 
-// Binary 返回二进制文件(含图片)时，返回直结构
-type Binary struct {
+// ResponseBinary 返回二进制文件(含图片)时，返回直结构
+type ResponseBinary struct {
 	Binary string `json:"binary" rj:"desc:Return binary data, for example: http.ResponseWriter.Write(...)"`
 }
 
-var binType = reflect.TypeOf((*Binary)(nil)).Elem()
+var binType = reflect.TypeOf((*ResponseBinary)(nil)).Elem()
 
 // IsBinary 是否返回二进制类型
-func IsBinary(obj interface{}) bool {
-	typ := reflect.TypeOf(obj)
+func IsBinary(typ reflect.Type) bool {
+	if typ == nil {
+		return false
+	}
 	if typ.Kind() == reflect.Ptr {
 		return typ.Elem() == binType
 	}

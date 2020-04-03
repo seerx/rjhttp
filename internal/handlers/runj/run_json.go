@@ -170,7 +170,7 @@ func (r *RjHandler) ServeHTTP(writer http.ResponseWriter, request *http.Request)
 					}
 					// 如果返回的是 RjBinary 对象，说明在业务逻辑函数内部已经处理了 writer 操作
 					// 此处不再需要返回任何信息，直接 return
-					if rjh.IsBinary(obj[0].Data) {
+					if rjh.IsBinary(obj[0].DataType) {
 						// 不做返回操作
 						return
 					}
