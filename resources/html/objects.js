@@ -25,7 +25,20 @@ Vue.component("objects", {
             this.loadNode(this.rootNode, this.resolve)
             this.expandArray = [this.objectId]
         },
-
+        generateDesc(data) {
+            let desc = ''
+            if (data['desc'] !== '') {
+                desc = data['desc']
+            }
+            if (data['pattern']) {
+                if (desc === '')  {
+                    desc = 'pattern: ' + data['pattern']
+                } else {
+                    desc += '<br>pattern: ' + data['pattern']
+                }
+            }
+            return desc
+        },
         loadNode (node, resolve) {
             if (node.level === 0) {
                 this.rootNode = node
@@ -64,6 +77,10 @@ Vue.component("objects", {
                 const item = items[n]
                 const obj = this.objectMap[item['reference']]
                 let name = item['name'] + ':' + item['type']
+                if (item['range']) {
+                    name += ':' + item['range']
+                }
+                // if (item)
                 if (item['array']) {
                     name = item['name'] + ':[' + item['type'] + ']'
                 }
@@ -77,6 +94,8 @@ Vue.component("objects", {
                     info: obj,
                     desc: item['description'],
                     deprecated: item['deprecated'],
+                    range: item['range'],
+                    pattern: item['pattern'],
                     require: item['require'],
                     // field: item,
                     // array: item['array'],
@@ -94,7 +113,11 @@ Vue.component("objects", {
              node-key="id"
              lazy>
         <span class="custom-tree-node" slot-scope="{ node, data }">
-            <el-tooltip v-if="data.desc && data.desc !== ''" class="item" effect="dark" :content="data.desc" placement="right">
+            <el-tooltip v-if="(data.desc && data.desc !== '') || data['pattern']" class="item" effect="dark" placement="right">
+                <div slot="content">
+                    <div v-if="data.desc !== ''">{{ data.desc }}</div>
+                    <div v-if="data.pattern">pattern: {{ data.pattern }}</div>
+                </div>
                 <span :style="data['deprecated'] ? 'text-decoration: line-through;' : ''">{{ node.label }}</span>
             </el-tooltip>
             <span v-else :style="data['deprecated'] ? 'text-decoration: line-through;' : ''">{{ node.label }}</span>

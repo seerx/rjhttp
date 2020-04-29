@@ -19,8 +19,8 @@ func (d *Demo1) Group() *rj.Group {
 }
 
 type Req struct {
-	ID      int    `json:"id" rj:"desc:ID 值,require"`
-	Name    string `json:"name" rj:"desc:名称"`
+	ID      int    `json:"id" rj:"desc:ID 值,require,range:(10,100)"`
+	Name    string `json:"name" rj:"desc:名称,regexp:1hdja9"`
 	Bt      []bool `json:"bt" rj:"desc:测试布尔型测,deprecated"`
 	Request *Req   `json:"request" rj:"desc:地轨测试"`
 }
