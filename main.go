@@ -26,6 +26,12 @@ func Inject(fns ...interface{}) *Builder {
 	return instance
 }
 
+// InjectAccessController 注册权限控制能力的注入函数
+func InjectAccessController(fn interface{}) *Builder {
+	return instance.InjectAccessController(fn)
+}
+
+// SetLogger 设置日志记录
 func SetLogger(log context.Log) *Builder {
 	return instance.SetLogger(log)
 }

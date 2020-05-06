@@ -39,7 +39,17 @@ func (b *Builder) Register(loaders ...rj.Loader) *Builder {
 // Inject 注册注入函数 func(arg map[string]interface{}) (*Type, error)
 func (b *Builder) Inject(fns ...interface{}) *Builder {
 	for _, fn := range fns {
-		b.runner.Inject(fn)
+		if err := b.runner.Inject(fn); err != nil {
+			panic(err)
+		}
+	}
+	return b
+}
+
+// InjectAccessController 注册权限控制相关的注入函数
+func (b *Builder) InjectAccessController(fn interface{}) *Builder {
+	if err := b.runner.Inject(fn); err != nil {
+		panic(err)
 	}
 	return b
 }
