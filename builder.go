@@ -48,7 +48,7 @@ func (b *Builder) Inject(fns ...interface{}) *Builder {
 
 // InjectAccessController 注册权限控制相关的注入函数
 func (b *Builder) InjectAccessController(fn interface{}) *Builder {
-	if err := b.runner.Inject(fn); err != nil {
+	if err := b.runner.InjectAccessController(fn); err != nil {
 		panic(err)
 	}
 	return b
