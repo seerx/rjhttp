@@ -12,7 +12,8 @@ function Ajax(rootUrl, headers) {
             if (self.headers) {
                 for (let k in self.headers) {
                     if (tokenInCookie) {
-                        xhr.setRequestHeader("Set-Cookie", k + "=" + self.headers[k])
+                        Cookies.set(k, self.headers[k])
+                        // xhr.setRequestHeader("Set-Cookie", k + "=" + self.headers[k])
                     } 
                     if (tokenInHeader) {
                         xhr.setRequestHeader(k, self.headers[k]);
@@ -81,7 +82,8 @@ function Ajax(rootUrl, headers) {
             if (self.headers) {
                 for (let k in self.headers) {
                     if (tokenInCookie) {
-                        xhr.setRequestHeader("Set-Cookie", k + "=" + self.headers[k])
+                        Cookies.set(k, self.headers[k])
+                        // xhr.setRequestHeader("Set-Cookie", k + "=" + self.headers[k])
                     }
                     if (tokenInHeader) {
                         xhr.setRequestHeader(k, self.headers[k]);
@@ -121,7 +123,8 @@ function Ajax(rootUrl, headers) {
             if (self.headers) {
                 for (let k in self.headers) {
                     if (tokenInCookie) {
-                        xhr.setRequestHeader("Set-Cookie", k + "=" + self.headers[k])
+                        Cookies.set(k, self.headers[k])
+                        // xhr.setRequestHeader("Set-Cookie", k + "=" + self.headers[k])
                     }
                     if (tokenInHeader) {
                         xhr.setRequestHeader(k, self.headers[k]);
@@ -151,16 +154,19 @@ function Ajax(rootUrl, headers) {
             let xhr = new XMLHttpRequest()
             // let url = self.root + '?' + param
             xhr.open("POST", self.root, true)
+            // xhr.withCredentials = true
             if (self.headers) {
                 for (let k in self.headers) {
                     if (tokenInCookie) {
-                        xhr.setRequestHeader("Set-Cookie", k + "=" + self.headers[k])
+                        Cookies.set(k, self.headers[k])
+                        // xhr.setRequestHeader("Cookie", k + "=" + self.headers[k])
                     }
                     if (tokenInHeader) {
                         xhr.setRequestHeader(k, self.headers[k]);
                     }
                 }
             }
+            
             xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
             xhr.onreadystatechange = function () {
                 if (xhr.readyState == 4 && xhr.status == 200) {
