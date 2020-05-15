@@ -18,8 +18,10 @@
                 <div style="width: calc(100% - 260px);" style="display: flex; align-content: center; align-items: center; height: 100%; word-break: break-all;">
                     <el-button type="primary" @click="inputToken"
                                style="padding: 6px; margin: 5px;">Token</el-button>
-                    <el-checkbox v-model="tokenInCookie">In Cookie</el-checkbox>
                     <span style="max-width: 300px;">{{ tokenInfo }}</span>
+                    <el-checkbox v-model="tokenInCookie">In Cookie</el-checkbox>
+                    <el-checkbox v-model="tokenInSetCookie">In Set-Cookie</el-checkbox>
+                    <el-checkbox v-model="tokenInHeader">In Header</el-checkbox>
                 </div>
             </el-header>
             <el-container>
@@ -54,7 +56,7 @@
                     </el-card>
                 </el-aside>
                 <el-main>
-                    <runner ref="runner" :token-in-cookie="tokenInCookie" :token-field="tokenKey" :token-value="tokenValue" :rootUrl="rootUrl">
+                    <runner ref="runner" :token-in-header="tokenInHeader" :token-in-cookie="tokenInCookie" :token-in-set-cookie="tokenInSetCookie" :token-field="tokenKey" :token-value="tokenValue" :rootUrl="rootUrl">
                     </runner>
                 </el-main>
             </el-container>
@@ -98,6 +100,8 @@
                 data: [],
                 tokenInfo: '',
                 tokenInCookie: true,
+                tokenInSetCookie: false,
+                tokenInHeader: true,
                 tokenKey: '',
                 tokenValue: '',
                 tokenKeyInput: '',

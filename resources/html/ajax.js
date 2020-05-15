@@ -4,16 +4,20 @@ function Ajax(rootUrl, headers) {
     self.root = rootUrl
     self.headers = headers
 
-    this.Upload = function (param, file, fieldName, tokenInCookie) {
+    this.Upload = function (param, file, fieldName, tokenInHeader, tokenInCookie, tokenInSetCookie) {
         return new Promise(function(resolve, reject) {
             let xhr = new XMLHttpRequest()
             xhr.open("POST", self.root, true)
             // xhr.setRequestHeader('Content-type', 'multipart/form-data');
             if (self.headers) {
                 for (let k in self.headers) {
-                    if (tokenInCookie) {
+                    if (tokenInSetCookie) {
                         xhr.setRequestHeader("Set-Cookie", k + "=" + self.headers[k])
-                    } else {
+                    }
+                    if (tokenInCookie) {
+                        xhr.setRequestHeader("Cookie", k + "=" + self.headers[k])
+                    } 
+                    if (tokenInHeader) {
                         xhr.setRequestHeader(k, self.headers[k]);
                     }
                 }
@@ -38,7 +42,7 @@ function Ajax(rootUrl, headers) {
         })
     }
 
-    this.GetX = function(param, tokenInCookie) {
+    this.GetX = function(param, tokenInHeader, tokenInCookie, tokenInSetCookie) {
         let openImage = function (res) {
             let win = window.open('about:blank')
             with (win.document) {
@@ -79,9 +83,13 @@ function Ajax(rootUrl, headers) {
             xhr.open("GET", url, true)
             if (self.headers) {
                 for (let k in self.headers) {
-                    if (tokenInCookie) {
+                    if (tokenInSetCookie) {
                         xhr.setRequestHeader("Set-Cookie", k + "=" + self.headers[k])
-                    } else {
+                    }
+                    if (tokenInCookie) {
+                        xhr.setRequestHeader("Cookie", k + "=" + self.headers[k])
+                    } 
+                    if (tokenInHeader) {
                         xhr.setRequestHeader(k, self.headers[k]);
                     }
                 }
@@ -111,16 +119,20 @@ function Ajax(rootUrl, headers) {
         })
     }
 
-    this.Get = function(param, tokenInCookie) {
+    this.Get = function(param, tokenInHeader, tokenInCookie, tokenInSetCookie) {
         return new Promise(function(resolve, reject) {
             let xhr = new XMLHttpRequest()
             let url = self.root + '?' + param
             xhr.open("GET", url, true)
             if (self.headers) {
                 for (let k in self.headers) {
-                    if (tokenInCookie) {
+                    if (tokenInSetCookie) {
                         xhr.setRequestHeader("Set-Cookie", k + "=" + self.headers[k])
-                    } else {
+                    }
+                    if (tokenInCookie) {
+                        xhr.setRequestHeader("Cookie", k + "=" + self.headers[k])
+                    } 
+                    if (tokenInHeader) {
                         xhr.setRequestHeader(k, self.headers[k]);
                     }
                 }
@@ -143,16 +155,20 @@ function Ajax(rootUrl, headers) {
         })
     }
 
-    this.Post = function(param, tokenInCookie) {
+    this.Post = function(param, tokenInHeader, tokenInCookie, tokenInSetCookie) {
         return new Promise(function(resolve, reject) {
             let xhr = new XMLHttpRequest()
             // let url = self.root + '?' + param
             xhr.open("POST", self.root, true)
             if (self.headers) {
                 for (let k in self.headers) {
-                    if (tokenInCookie) {
+                    if (tokenInSetCookie) {
                         xhr.setRequestHeader("Set-Cookie", k + "=" + self.headers[k])
-                    } else {
+                    }
+                    if (tokenInCookie) {
+                        xhr.setRequestHeader("Cookie", k + "=" + self.headers[k])
+                    } 
+                    if (tokenInHeader) {
                         xhr.setRequestHeader(k, self.headers[k]);
                     }
                 }
