@@ -4,10 +4,6 @@ Vue.component("runner", {
             type: Boolean,
             default: true
         },
-        tokenInSetCookie: {
-            type: Boolean,
-            default: false
-        },
         tokenInHeader: {
             type: Boolean,
             default: false
@@ -124,7 +120,7 @@ Vue.component("runner", {
             this.requestCount ++
             const file = this.$refs.file.files[0];
             const ajax = new Ajax(this.rootUrl, this.headers())
-            ajax.Upload(this.json, file, this.file, this.tokenInHeader, this.tokenInCookie, this.tokenInSetCookie).then(res => {
+            ajax.Upload(this.json, file, this.file, this.tokenInHeader, this.tokenInCookie).then(res => {
                 this.complete = true
                 let json = JSON.parse(res)
                 this.success = !json['error']
@@ -140,7 +136,7 @@ Vue.component("runner", {
         open() {
             this.requestCount ++
             let ajax = new Ajax(this.rootUrl, this.headers())
-            ajax.GetX(this.json, this.tokenInHeader, this.tokenInCookie, this.tokenInSetCookie).then(res => {
+            ajax.GetX(this.json, this.tokenInHeader, this.tokenInCookie).then(res => {
                 this.complete = true
                 this.success = true
                 console.log('Ok')
@@ -153,7 +149,7 @@ Vue.component("runner", {
         get () {
             this.requestCount ++
             let ajax = new Ajax(this.rootUrl, this.headers())
-            ajax.Get(this.json, this.tokenInHeader, this.tokenInCookie, this.tokenInSetCookie).then(res => {
+            ajax.Get(this.json, this.tokenInHeader, this.tokenInCookie).then(res => {
                 this.complete = true
                 let json = JSON.parse(res)
                 this.success = !json['error']
@@ -169,7 +165,7 @@ Vue.component("runner", {
         post () {
             this.requestCount ++
             let ajax = new Ajax(this.rootUrl, this.headers())
-            ajax.Post(this.json, this.tokenInHeader, this.tokenInCookie, this.tokenInSetCookie).then(res => {
+            ajax.Post(this.json, this.tokenInHeader, this.tokenInCookie).then(res => {
                 this.complete = true
                 let json = JSON.parse(res)
                 this.success = !json['error']

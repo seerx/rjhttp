@@ -4,18 +4,15 @@ function Ajax(rootUrl, headers) {
     self.root = rootUrl
     self.headers = headers
 
-    this.Upload = function (param, file, fieldName, tokenInHeader, tokenInCookie, tokenInSetCookie) {
+    this.Upload = function (param, file, fieldName, tokenInHeader, tokenInCookie) {
         return new Promise(function(resolve, reject) {
             let xhr = new XMLHttpRequest()
             xhr.open("POST", self.root, true)
             // xhr.setRequestHeader('Content-type', 'multipart/form-data');
             if (self.headers) {
                 for (let k in self.headers) {
-                    if (tokenInSetCookie) {
-                        xhr.setRequestHeader("Set-Cookie", k + "=" + self.headers[k])
-                    }
                     if (tokenInCookie) {
-                        xhr.setRequestHeader("Cookie", k + "=" + self.headers[k])
+                        xhr.setRequestHeader("Set-Cookie", k + "=" + self.headers[k])
                     } 
                     if (tokenInHeader) {
                         xhr.setRequestHeader(k, self.headers[k]);
@@ -42,7 +39,7 @@ function Ajax(rootUrl, headers) {
         })
     }
 
-    this.GetX = function(param, tokenInHeader, tokenInCookie, tokenInSetCookie) {
+    this.GetX = function(param, tokenInHeader, tokenInCookie) {
         let openImage = function (res) {
             let win = window.open('about:blank')
             with (win.document) {
@@ -83,12 +80,9 @@ function Ajax(rootUrl, headers) {
             xhr.open("GET", url, true)
             if (self.headers) {
                 for (let k in self.headers) {
-                    if (tokenInSetCookie) {
+                    if (tokenInCookie) {
                         xhr.setRequestHeader("Set-Cookie", k + "=" + self.headers[k])
                     }
-                    if (tokenInCookie) {
-                        xhr.setRequestHeader("Cookie", k + "=" + self.headers[k])
-                    } 
                     if (tokenInHeader) {
                         xhr.setRequestHeader(k, self.headers[k]);
                     }
@@ -119,19 +113,16 @@ function Ajax(rootUrl, headers) {
         })
     }
 
-    this.Get = function(param, tokenInHeader, tokenInCookie, tokenInSetCookie) {
+    this.Get = function(param, tokenInHeader, tokenInCookie) {
         return new Promise(function(resolve, reject) {
             let xhr = new XMLHttpRequest()
             let url = self.root + '?' + param
             xhr.open("GET", url, true)
             if (self.headers) {
                 for (let k in self.headers) {
-                    if (tokenInSetCookie) {
+                    if (tokenInCookie) {
                         xhr.setRequestHeader("Set-Cookie", k + "=" + self.headers[k])
                     }
-                    if (tokenInCookie) {
-                        xhr.setRequestHeader("Cookie", k + "=" + self.headers[k])
-                    } 
                     if (tokenInHeader) {
                         xhr.setRequestHeader(k, self.headers[k]);
                     }
@@ -155,19 +146,16 @@ function Ajax(rootUrl, headers) {
         })
     }
 
-    this.Post = function(param, tokenInHeader, tokenInCookie, tokenInSetCookie) {
+    this.Post = function(param, tokenInHeader, tokenInCookie) {
         return new Promise(function(resolve, reject) {
             let xhr = new XMLHttpRequest()
             // let url = self.root + '?' + param
             xhr.open("POST", self.root, true)
             if (self.headers) {
                 for (let k in self.headers) {
-                    if (tokenInSetCookie) {
+                    if (tokenInCookie) {
                         xhr.setRequestHeader("Set-Cookie", k + "=" + self.headers[k])
                     }
-                    if (tokenInCookie) {
-                        xhr.setRequestHeader("Cookie", k + "=" + self.headers[k])
-                    } 
                     if (tokenInHeader) {
                         xhr.setRequestHeader(k, self.headers[k]);
                     }
