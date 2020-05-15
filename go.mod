@@ -1,5 +1,5 @@
 module github.com/seerx/rjhttp
 
-go 1.13
+go 1.14
 
-require github.com/seerx/runjson v0.0.0-20200506090616-3629dc8d57b0
+require github.com/seerx/runjson v0.0.0-20200507005120-6f20c868e551

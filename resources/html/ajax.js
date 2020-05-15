@@ -4,14 +4,18 @@ function Ajax(rootUrl, headers) {
     self.root = rootUrl
     self.headers = headers
 
-    this.Upload = function (param, file, fieldName) {
+    this.Upload = function (param, file, fieldName, tokenInCookie) {
         return new Promise(function(resolve, reject) {
             let xhr = new XMLHttpRequest()
             xhr.open("POST", self.root, true)
             // xhr.setRequestHeader('Content-type', 'multipart/form-data');
             if (self.headers) {
                 for (let k in self.headers) {
-                    xhr.setRequestHeader(k, self.headers[k]);
+                    if (tokenInCookie) {
+                        xhr.setRequestHeader("Set-Cookie", k + "=" + self.headers[k])
+                    } else {
+                        xhr.setRequestHeader(k, self.headers[k]);
+                    }
                 }
             }
             xhr.setRequestHeader('--run-json-field--', 'body');
@@ -34,7 +38,7 @@ function Ajax(rootUrl, headers) {
         })
     }
 
-    this.GetX = function(param) {
+    this.GetX = function(param, tokenInCookie) {
         let openImage = function (res) {
             let win = window.open('about:blank')
             with (win.document) {
@@ -75,7 +79,11 @@ function Ajax(rootUrl, headers) {
             xhr.open("GET", url, true)
             if (self.headers) {
                 for (let k in self.headers) {
-                    xhr.setRequestHeader(k, self.headers[k]);
+                    if (tokenInCookie) {
+                        xhr.setRequestHeader("Set-Cookie", k + "=" + self.headers[k])
+                    } else {
+                        xhr.setRequestHeader(k, self.headers[k]);
+                    }
                 }
             }
             xhr.responseType = 'blob'
@@ -103,14 +111,18 @@ function Ajax(rootUrl, headers) {
         })
     }
 
-    this.Get = function(param) {
+    this.Get = function(param, tokenInCookie) {
         return new Promise(function(resolve, reject) {
             let xhr = new XMLHttpRequest()
             let url = self.root + '?' + param
             xhr.open("GET", url, true)
             if (self.headers) {
                 for (let k in self.headers) {
-                    xhr.setRequestHeader(k, self.headers[k]);
+                    if (tokenInCookie) {
+                        xhr.setRequestHeader("Set-Cookie", k + "=" + self.headers[k])
+                    } else {
+                        xhr.setRequestHeader(k, self.headers[k]);
+                    }
                 }
             }
             xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
@@ -131,14 +143,18 @@ function Ajax(rootUrl, headers) {
         })
     }
 
-    this.Post = function(param) {
+    this.Post = function(param, tokenInCookie) {
         return new Promise(function(resolve, reject) {
             let xhr = new XMLHttpRequest()
             // let url = self.root + '?' + param
             xhr.open("POST", self.root, true)
             if (self.headers) {
                 for (let k in self.headers) {
-                    xhr.setRequestHeader(k, self.headers[k]);
+                    if (tokenInCookie) {
+                        xhr.setRequestHeader("Set-Cookie", k + "=" + self.headers[k])
+                    } else {
+                        xhr.setRequestHeader(k, self.headers[k]);
+                    }
                 }
             }
             xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
