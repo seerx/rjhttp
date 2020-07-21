@@ -100,6 +100,8 @@ func parseFieldOrBody(request *http.Request, maxSize int64) (rj.Requests, error)
 func parseBody(request *http.Request, maxSize int64) (rj.Requests, error) {
 	// http POST body 作为请求参数
 	var reqs rj.Requests
+	// data, err := ioutil.ReadAll(request.Body)
+	// if err != nil {}
 	if err := json.NewDecoder(request.Body).Decode(&reqs); err != nil {
 		return nil, err
 	}
