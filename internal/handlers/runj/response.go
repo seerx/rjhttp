@@ -40,8 +40,8 @@ func (r *RjResponse) Remove(key string) {
 	}
 }
 
-// Clear 清空数据
-func (r *RjResponse) Clear() {
+// RemoveAll 清空数据
+func (r *RjResponse) RemoveAll() {
 	if r.Extra != nil {
 		r.Extra = nil
 	}

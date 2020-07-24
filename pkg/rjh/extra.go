@@ -5,5 +5,5 @@ type Extra interface {
 	Set(key string, data interface{})
 	Get(key string) (interface{}, error)
 	Remove(key string)
-	Clear()
+	RemoveAll()
 }
