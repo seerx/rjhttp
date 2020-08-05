@@ -38,6 +38,7 @@ func (c *RJClient) New() (*http.Client, error) {
 		},
 		//建立连接后读超时
 		ResponseHeaderTimeout: c.timeout.response,
+		DisableKeepAlives:     true,
 	}
 
 	if jar != nil {
