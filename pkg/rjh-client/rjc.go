@@ -79,7 +79,65 @@ func (c *RJClient) PostOne(obj *InvokeObject, fn func(res *ResponseObject) error
 }
 
 // Upload 上传文件
+// func (c *RJClient) Upload(obj *InvokeObject, files []*FileObject, fn func(res *ResponseObject) error) error {
+// 	buf := &bytes.Buffer{}
+// 	writer := multipart.NewWriter(buf)
+// 	// defer writer.Close()
+
+// 	headers := map[string]string{}
+// 	// 创建上传文件的内容
+// 	for _, fo := range files {
+// 		// part, err := writer.CreateFormFile("image", filepath.Base(dest))
+// 		part, err := writer.CreateFormFile(fo.Field, fo.FileName)
+// 		if err != nil {
+// 			return err
+// 		}
+// 		_, err = io.Copy(part, fo.Data)
+// 		if err != nil {
+// 			return err
+// 		}
+// 	}
+
+// 	info, err := json.Marshal([]*InvokeObject{obj})
+// 	if err != nil {
+// 		return err
+// 	}
+
+// 	err = writer.WriteField(argField, string(info))
+// 	if err != nil {
+// 		return err
+// 	}
+
+// 	headers["Content-Type"] = writer.FormDataContentType()
+// 	headers[option.PostFieldNameInHTTPHeader] = argField
+
+// 	err = writer.Close()
+// 	if err != nil {
+// 		return err
+// 	}
+
+// 	res, err := c.doRequest(c.api, buf, http.MethodPost, headers)
+// 	if err != nil {
+// 		return err
+// 	}
+// 	if res.Error != "" {
+// 		return fn(&ResponseObject{Error: res.Error})
+// 	}
+// 	return fn(res.Data[obj.Service][0])
+// }
+
+// Upload 上传单个文件
 func (c *RJClient) Upload(obj *InvokeObject, files []*FileObject, fn func(res *ResponseObject) error) error {
+	return c.UploadMutiple([]*InvokeObject{obj}, files, func(res *Response) error {
+		if res.Error != "" {
+			return fn(&ResponseObject{Error: res.Error})
+		}
+		return fn(res.Data[obj.Service][0])
+	})
+}
+
+// UploadMutiple 上传文件
+func (c *RJClient) UploadMutiple(requests []*InvokeObject, files []*FileObject, fn func(res *Response) error) error {
 	buf := &bytes.Buffer{}
 	writer := multipart.NewWriter(buf)
 	// defer writer.Close()
@@ -98,7 +156,7 @@ func (c *RJClient) Upload(obj *InvokeObject, files []*FileObject, fn func(res *R
 		}
 	}
 
-	info, err := json.Marshal([]*InvokeObject{obj})
+	info, err := json.Marshal(requests)
 	if err != nil {
 		return err
 	}
@@ -121,9 +179,9 @@ func (c *RJClient) Upload(obj *InvokeObject, files []*FileObject, fn func(res *R
 		return err
 	}
 	if res.Error != "" {
-		return fn(&ResponseObject{Error: res.Error})
+		return fn(&Response{Error: res.Error})
 	}
-	return fn(res.Data[obj.Service][0])
+	return fn(res)
 }
 
 func (c *RJClient) request(data interface{}, method string, headers map[string]string) (*Response, error) {
