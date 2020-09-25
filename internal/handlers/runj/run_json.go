@@ -79,7 +79,7 @@ func parseFieldOrBody(request *http.Request, maxSize int64, logRequest bool) (rj
 
 	fieldName := request.Header.Get(option.PostFieldNameInHTTPHeader)
 	if fieldName == "" {
-		return parseBody(request, maxSize)
+		return parseBody(request, maxSize, logRequest)
 	}
 	var reqs rj.Requests
 
