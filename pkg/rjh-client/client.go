@@ -13,8 +13,9 @@ type RJClient struct {
 		dial     time.Duration
 		response time.Duration
 	}
-	cookies map[string]string
-	headers map[string]string
+	cookies    map[string]string
+	headers    map[string]string
+	logRequest bool
 }
 
 // NewClient 创建客户端
@@ -37,6 +38,12 @@ func NewClient(host, api string, port int) *RJClient {
 			response: 5 * time.Second,
 		},
 	}
+}
+
+// LogRequest 打印日志
+func (c *RJClient) LogRequest() *RJClient {
+	c.logRequest = true
+	return c
 }
 
 // SetDialTimeout 设置连接超时，默认 20 秒
