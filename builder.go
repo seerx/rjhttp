@@ -90,6 +90,12 @@ func (b *Builder) SetLogger(log context.Log) *Builder {
 	return b
 }
 
+// LogRequest 设置打印请求信息
+func (b *Builder) LogRequest() *Builder {
+	b.option.LogRequest = true
+	return b
+}
+
 //InjectProxy 注册注入函数 func(ctx inject.Context) (*Type, error)
 //此注入，可以直接获得 http.Request 以及 http.ResponseWriter
 //func (b *Builder) InjectProxy(fns ...interface{}) error {

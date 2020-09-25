@@ -15,15 +15,18 @@ type Option struct {
 	EnableUpload    bool  // 是否启用上传功能
 	EnableWebClient bool  // 是否启用 Web 界面
 	UploadMaxBytes  int64 // 上传文件最大尺寸
+	LogRequest      bool  // 打印请求信息
 	//WebDebug        bool  // 用于调试 Web 界面，开启后 Web 资源将从 resources 目录中获取
 }
 
+// NewOption 创建 option 选项
 func NewOption() *Option {
 	//devel := os.Getenv("rjhttp_developer")
 	return &Option{
 		EnableUpload:    false,
 		EnableWebClient: false,
 		UploadMaxBytes:  32 << 20, // 默认限制为 32Mb
+		LogRequest:      false,
 		//WebDebug:        devel == "true",
 	}
 }

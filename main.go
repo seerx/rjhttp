@@ -36,6 +36,11 @@ func SetLogger(log context.Log) *Builder {
 	return instance.SetLogger(log)
 }
 
+// LogRequest 设置打印请求数据
+func LogRequest() *Builder {
+	return instance.LogRequest()
+}
+
 // Before 设置运行前拦截函数
 func Before(fn runjson.BeforeRun) *Builder {
 	return instance.Before(fn)

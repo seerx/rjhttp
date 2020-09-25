@@ -4,10 +4,12 @@ import (
 	context2 "context"
 	"encoding/json"
 	"fmt"
+	"io/ioutil"
 	"net/http"
 	"net/url"
 	"strings"
 
+	"github.com/pkg/errors"
 	"github.com/seerx/rjhttp/pkg/rjh"
 
 	"github.com/seerx/runjson/pkg/context"
@@ -23,7 +25,7 @@ import (
 type RjHandler struct {
 	Runner  *runjson.Runner
 	Option  *option.Option
-	parseFn func(request *http.Request, maxSize int64) (rj.Requests, error)
+	parseFn func(request *http.Request, maxSize int64, logRequest bool) (rj.Requests, error)
 }
 
 // injectUpload 上传辅助类注入函数
@@ -70,7 +72,7 @@ func NewRjHandler(runner *runjson.Runner, opt *option.Option) *RjHandler {
 	}
 
 }
-func parseFieldOrBody(request *http.Request, maxSize int64) (rj.Requests, error) {
+func parseFieldOrBody(request *http.Request, maxSize int64, logRequest bool) (rj.Requests, error) {
 	// http POST 判断是否有指定参数 field 名称
 	//	如果有则使用 PostForm 中的此值作为请求参数
 	//	如果没有，则使用 body 作为请求参数
@@ -91,19 +93,34 @@ func parseFieldOrBody(request *http.Request, maxSize int64) (rj.Requests, error)
 	if val == "" {
 		return nil, fmt.Errorf("No request found")
 	}
+	if logRequest {
+		fmt.Println("recv request:\n" + val)
+	}
 	if err := json.NewDecoder(strings.NewReader(val)).Decode(&reqs); err != nil {
 		return nil, err
 	}
 	return reqs, nil
 }
 
-func parseBody(request *http.Request, maxSize int64) (rj.Requests, error) {
+func parseBody(request *http.Request, maxSize int64, logRequest bool) (rj.Requests, error) {
 	// http POST body 作为请求参数
 	var reqs rj.Requests
 	// data, err := ioutil.ReadAll(request.Body)
 	// if err != nil {}
-	if err := json.NewDecoder(request.Body).Decode(&reqs); err != nil {
-		return nil, err
+	if logRequest {
+		data, err := ioutil.ReadAll(request.Body)
+		if err != nil {
+			return nil, errors.Wrap(err, "rea http post body error")
+		}
+		val := string(data)
+		fmt.Println("recv request:\n" + val)
+		if err := json.NewDecoder(strings.NewReader(val)).Decode(&reqs); err != nil {
+			return nil, err
+		}
+	} else {
+		if err := json.NewDecoder(request.Body).Decode(&reqs); err != nil {
+			return nil, err
+		}
 	}
 	return reqs, nil
 }
@@ -138,7 +155,7 @@ func (r *RjHandler) ServeHTTP(writer http.ResponseWriter, request *http.Request)
 	var err error
 	if request.Method == http.MethodPost || request.Method == http.MethodPut {
 		// http POST PUT
-		reqs, err = r.parseFn(request, r.Option.UploadMaxBytes)
+		reqs, err = r.parseFn(request, r.Option.UploadMaxBytes, r.Option.LogRequest)
 	} else {
 		// http Other methods
 		reqs, err = parseQuery(request)
