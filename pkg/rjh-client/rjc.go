@@ -236,6 +236,37 @@ func (c *RJClient) request(data interface{}, method string, headers map[string]s
 	// return &res, nil
 }
 
+// Download  下载文件
+func (c *RJClient) Download(requestData interface{}, headers map[string]string, writer io.Writer) error {
+	buf, err := json.Marshal(requestData)
+	if err != nil {
+		return err
+	}
+	url := fmt.Sprintf("%s?%s", c.api, url.QueryEscape(string(buf)))
+	request, err := http.NewRequest(http.MethodGet, url, nil)
+	if err != nil {
+		return err
+	}
+	if headers != nil {
+		for key, val := range headers {
+			request.Header.Add(key, val)
+		}
+	}
+
+	clt, err := c.New()
+	if err != nil {
+		return err
+	}
+	response, err := clt.Do(request)
+	if err != nil {
+		return err
+	}
+	defer response.Body.Close()
+
+	_, err = io.Copy(writer, response.Body)
+	return err
+}
+
 func (c *RJClient) doRequest(url string, reader io.Reader, method string, headers map[string]string) (*Response, error) {
 	// buf, err := json.Marshal(data)
 	// if err != nil {
