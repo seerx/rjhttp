@@ -237,7 +237,7 @@ func (c *RJClient) request(data interface{}, method string, headers map[string]s
 }
 
 // Download  下载文件
-func (c *RJClient) Download(requestData interface{}, headers map[string]string, writer io.Writer) error {
+func (c *RJClient) Download(requestData interface{}, headers map[string]string, fn func(reader io.Reader) error) error {
 	buf, err := json.Marshal(requestData)
 	if err != nil {
 		return err
@@ -262,9 +262,9 @@ func (c *RJClient) Download(requestData interface{}, headers map[string]string, 
 		return err
 	}
 	defer response.Body.Close()
-
-	_, err = io.Copy(writer, response.Body)
-	return err
+	return fn(response.Body)
+	// _, err = io.Copy(writer, response.Body)
+	// return err
 }
 
 func (c *RJClient) doRequest(url string, reader io.Reader, method string, headers map[string]string) (*Response, error) {
