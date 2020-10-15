@@ -242,7 +242,7 @@ func (c *RJClient) Download(obj *InvokeObject, headers map[string]string, fn fun
 	if err != nil {
 		return err
 	}
-	url := fmt.Sprintf("%s?%s", c.api, url.QueryEscape(string(buf)))
+	url := fmt.Sprintf("%s?[%s]", c.api, url.QueryEscape(string(buf)))
 	request, err := http.NewRequest(http.MethodGet, url, nil)
 	if err != nil {
 		return err
