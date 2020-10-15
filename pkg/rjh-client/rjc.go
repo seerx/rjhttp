@@ -237,8 +237,8 @@ func (c *RJClient) request(data interface{}, method string, headers map[string]s
 }
 
 // Download  下载文件
-func (c *RJClient) Download(requestData interface{}, headers map[string]string, fn func(reader io.Reader) error) error {
-	buf, err := json.Marshal(requestData)
+func (c *RJClient) Download(obj *InvokeObject, headers map[string]string, fn func(reader io.Reader) error) error {
+	buf, err := json.Marshal(obj)
 	if err != nil {
 		return err
 	}
