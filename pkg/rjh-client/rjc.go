@@ -9,6 +9,7 @@ import (
 	"mime/multipart"
 	"net/http"
 	"net/url"
+	"time"
 
 	"github.com/seerx/rjhttp/pkg/option"
 )
@@ -237,7 +238,7 @@ func (c *RJClient) request(data interface{}, method string, headers map[string]s
 }
 
 // Download  下载文件
-func (c *RJClient) Download(obj *InvokeObject, headers map[string]string, fn func(reader io.Reader) error) error {
+func (c *RJClient) Download(obj *InvokeObject, timeout time.Duration, headers map[string]string, fn func(reader io.Reader) error) error {
 	buf, err := json.Marshal(obj)
 	if err != nil {
 		return err
@@ -253,7 +254,7 @@ func (c *RJClient) Download(obj *InvokeObject, headers map[string]string, fn fun
 		}
 	}
 
-	clt, err := c.New()
+	clt, err := c.New(timeout)
 	if err != nil {
 		return err
 	}
@@ -272,7 +273,7 @@ func (c *RJClient) doRequest(url string, reader io.Reader, method string, header
 	// if err != nil {
 	// 	return nil, err
 	// }
-	clt, err := c.New()
+	clt, err := c.New(10 * time.Second)
 	if err != nil {
 		return nil, err
 	}
