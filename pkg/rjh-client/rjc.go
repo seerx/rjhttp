@@ -254,7 +254,7 @@ func (c *RJClient) Download(obj *InvokeObject, timeout time.Duration, headers ma
 		}
 	}
 
-	clt, err := c.New(timeout)
+	clt, err := c.New()
 	if err != nil {
 		return err
 	}
@@ -273,7 +273,7 @@ func (c *RJClient) doRequest(url string, reader io.Reader, method string, header
 	// if err != nil {
 	// 	return nil, err
 	// }
-	clt, err := c.New(10 * time.Second)
+	clt, err := c.New()
 	if err != nil {
 		return nil, err
 	}

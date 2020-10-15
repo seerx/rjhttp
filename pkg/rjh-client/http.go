@@ -5,11 +5,10 @@ import (
 	"net/http"
 	"net/http/cookiejar"
 	"net/url"
-	"time"
 )
 
 // New 创建 http.Client
-func (c *RJClient) New(timeout time.Duration) (*http.Client, error) {
+func (c *RJClient) New() (*http.Client, error) {
 	var jar *cookiejar.Jar
 	if c.cookies != nil && len(c.cookies) > 0 {
 		uri, err := url.ParseRequestURI(c.host)
@@ -50,6 +49,6 @@ func (c *RJClient) New(timeout time.Duration) (*http.Client, error) {
 	}
 	return &http.Client{
 		Transport: tr,
-		Timeout:   timeout,
+		// Timeout:   timeout,
 	}, nil
 }
