@@ -97,7 +97,7 @@ func parseFieldOrBody(request *http.Request, maxSize int64, logRequest bool) (rj
 		fmt.Println("recv request:\n" + val)
 	}
 	d := json.NewDecoder(strings.NewReader(val))
-	d.UseNumber()
+	// d.UseNumber()
 	if err := d.Decode(&reqs); err != nil {
 		return nil, err
 	}
@@ -117,13 +117,13 @@ func parseBody(request *http.Request, maxSize int64, logRequest bool) (rj.Reques
 		val := string(data)
 		fmt.Println("recv request:\n" + val)
 		d := json.NewDecoder(strings.NewReader(val))
-		d.UseNumber()
+		// d.UseNumber()
 		if err := d.Decode(&reqs); err != nil {
 			return nil, err
 		}
 	} else {
 		d := json.NewDecoder(request.Body)
-		d.UseNumber()
+		// d.UseNumber()
 		if err := d.Decode(&reqs); err != nil {
 			return nil, err
 		}
@@ -150,7 +150,7 @@ func parseQuery(request *http.Request) (rj.Requests, error) {
 	}
 	var reqs rj.Requests
 	d := json.NewDecoder(strings.NewReader(query))
-	d.UseNumber()
+	// d.UseNumber()
 	if err := d.Decode(&reqs); err != nil {
 		return nil, err
 	}
