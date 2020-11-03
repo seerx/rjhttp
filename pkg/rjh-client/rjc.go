@@ -163,7 +163,7 @@ func (c *RJClient) UploadMutiple(requests []*InvokeObject, files []*FileObject, 
 
 	requestInfo := string(info)
 	if c.logRequest {
-		fmt.Printf("send to %s:\n%s", c.api, requestInfo)
+		fmt.Printf("send to %s:\n%s\n", c.api, requestInfo)
 	}
 
 	err = writer.WriteField(argField, requestInfo)
