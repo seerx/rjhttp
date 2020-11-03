@@ -96,7 +96,9 @@ func parseFieldOrBody(request *http.Request, maxSize int64, logRequest bool) (rj
 	if logRequest {
 		fmt.Println("recv request:\n" + val)
 	}
-	if err := json.NewDecoder(strings.NewReader(val)).Decode(&reqs); err != nil {
+	d := json.NewDecoder(strings.NewReader(val))
+	d.UseNumber()
+	if err := d.Decode(&reqs); err != nil {
 		return nil, err
 	}
 	return reqs, nil
@@ -114,11 +116,15 @@ func parseBody(request *http.Request, maxSize int64, logRequest bool) (rj.Reques
 		}
 		val := string(data)
 		fmt.Println("recv request:\n" + val)
-		if err := json.NewDecoder(strings.NewReader(val)).Decode(&reqs); err != nil {
+		d := json.NewDecoder(strings.NewReader(val))
+		d.UseNumber()
+		if err := d.Decode(&reqs); err != nil {
 			return nil, err
 		}
 	} else {
-		if err := json.NewDecoder(request.Body).Decode(&reqs); err != nil {
+		d := json.NewDecoder(request.Body)
+		d.UseNumber()
+		if err := d.Decode(&reqs); err != nil {
 			return nil, err
 		}
 	}
@@ -143,7 +149,9 @@ func parseQuery(request *http.Request) (rj.Requests, error) {
 		return nil, fmt.Errorf("No request param found")
 	}
 	var reqs rj.Requests
-	if err := json.NewDecoder(strings.NewReader(query)).Decode(&reqs); err != nil {
+	d := json.NewDecoder(strings.NewReader(query))
+	d.UseNumber()
+	if err := d.Decode(&reqs); err != nil {
 		return nil, err
 	}
 	return reqs, nil
@@ -199,6 +207,7 @@ func (r *RjHandler) ServeHTTP(writer http.ResponseWriter, request *http.Request)
 		}
 	}
 	// 序列化 json
+	// json.NewDecoder(nil).UseNumber()
 	data, err := json.Marshal(res)
 	if err != nil {
 		// 序列化数据时发生错误
