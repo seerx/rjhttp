@@ -311,5 +311,15 @@ func (c *RJClient) doRequest(url string, reader io.Reader, method string, header
 		// fmt.Println(string(body))
 		return nil, err
 	}
+
+	if c.logRequest {
+		jd, err := json.MarshalIndent(res, "", "  ")
+		if err != nil {
+			fmt.Println("Error while encode response as json", err.Error())
+		} else {
+			fmt.Println("Response: ", string(jd))
+		}
+	}
+
 	return &res, nil
 }
