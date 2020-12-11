@@ -13,6 +13,11 @@ import (
 // instance 默认的 builder
 var instance = NewBuilder()
 
+// GetDefaultInstance 获取默认 builder 实例
+func GetDefaultInstance() *Builder {
+	return instance
+}
+
 // Register 注册服务
 func Register(loaders ...rj.Loader) *Builder {
 	return instance.Register(loaders...)
