@@ -98,3 +98,8 @@ func EnableWebClient(enable bool) *Builder {
 func Build() http.Handler {
 	return instance.Build()
 }
+
+// CreateHandler 创建 handler，与 Build 函数相同
+func CreateHandler() http.Handler {
+	return instance.Build()
+}
