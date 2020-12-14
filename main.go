@@ -13,8 +13,8 @@ import (
 // instance 默认的 builder
 var instance = NewBuilder()
 
-// GetDefaultInstance 获取默认 builder 实例
-func GetDefaultInstance() *Builder {
+// GetDefaultBuilder 获取默认 builder 实例
+func GetDefaultBuilder() *Builder {
 	return instance
 }
 
