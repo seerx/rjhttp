@@ -1,6 +1,7 @@
 package rjh
 
 import (
+	"fmt"
 	"io/ioutil"
 	"mime/multipart"
 	"net/http"
@@ -55,4 +56,55 @@ func (u *Upload) ReadFile(field string) ([]byte, *multipart.FileHeader, error) {
 		return nil, fh, err
 	}
 	return data, fh, nil
+}
+
+// FileInfo 文件信息
+type FileInfo struct {
+	FieldName string
+	Files     []struct {
+		Name string
+		Size int64
+	}
+}
+
+// GetFileInfo 获取上传文件的信息
+func (u *Upload) GetFileInfo(field string) (*struct {
+	Name string
+	Size int64
+}, error) {
+	file, exists := u.Request.MultipartForm.File[field]
+	if (!exists) || len(file) == 0 {
+		return nil, fmt.Errorf("%s is not exists", field)
+	}
+	return &struct {
+		Name string
+		Size int64
+	}{
+		Name: file[0].Filename,
+		Size: file[0].Size,
+	}, nil
+}
+
+// GetFiles 获取文件列表
+func (u *Upload) GetFiles() ([]*FileInfo, error) {
+	var lst []*FileInfo
+
+	for field, files := range u.Request.MultipartForm.File {
+		info := &FileInfo{
+			FieldName: field,
+		}
+		for _, file := range files {
+			info.Files = append(info.Files, struct {
+				Name string
+				Size int64
+			}{
+				Name: file.Filename,
+				Size: file.Size,
+			})
+		}
+		if len(info.Files) > 0 {
+			lst = append(lst, info)
+		}
+	}
+	return lst, nil
 }
