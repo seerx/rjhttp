@@ -90,6 +90,12 @@ func (b *Builder) SetLogger(log context.Log) *Builder {
 	return b
 }
 
+// SetLogRegister 设置是否记录注册过程
+func (b *Builder) SetLogRegister(log bool) *Builder {
+	b.runner.SetLogRegister(log)
+	return b
+}
+
 // LogRequest 设置打印请求信息
 func (b *Builder) LogRequest() *Builder {
 	b.option.LogRequest = true

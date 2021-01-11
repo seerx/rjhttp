@@ -10,3 +10,4 @@ go.sum
 .idea/vcs.xml
 .idea/watcherTasks.xml
 resources/html/.idea/.gitignore
+vendor

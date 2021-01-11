@@ -41,6 +41,11 @@ func SetLogger(log context.Log) *Builder {
 	return instance.SetLogger(log)
 }
 
+// SetLogRegister 设置是否记录注册 api 过程
+func SetLogRegister(log bool) *Builder {
+	return instance.SetLogRegister(log)
+}
+
 // LogRequest 设置打印请求数据
 func LogRequest() *Builder {
 	return instance.LogRequest()
