@@ -112,20 +112,20 @@ func parseBody(request *http.Request, maxSize int64, logRequest bool) (rj.Reques
 	if logRequest {
 		data, err := ioutil.ReadAll(request.Body)
 		if err != nil {
-			return nil, errors.Wrap(err, "rea http post body error")
+			return nil, errors.Wrap(err, "read http post body error")
 		}
 		val := string(data)
 		fmt.Println("recv request:\n" + val)
 		d := json.NewDecoder(strings.NewReader(val))
 		// d.UseNumber()
 		if err := d.Decode(&reqs); err != nil {
-			return nil, err
+			return nil, errors.Wrap(err, "Parse body error, maybe need call rjhttp.EnableUpload(true)")
 		}
 	} else {
 		d := json.NewDecoder(request.Body)
 		// d.UseNumber()
 		if err := d.Decode(&reqs); err != nil {
-			return nil, err
+			return nil, errors.Wrap(err, "Parse body error, maybe need call rjhttp.EnableUpload(true)")
 		}
 	}
 	return reqs, nil
