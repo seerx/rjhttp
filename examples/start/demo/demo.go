@@ -32,7 +32,7 @@ type Resp struct {
 }
 
 func (d *Demo1) Test1(req *Req) ([]*Resp, error) {
-	return []*Resp{&Resp{
+	return []*Resp{{
 		ID:   req.ID,
 		Name: "Tom",
 		Age:  12,

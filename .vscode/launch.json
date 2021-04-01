@@ -12,6 +12,14 @@
             "program": "${workspaceRoot}/examples/start/main.go",
             "env": {},
             "args": []
+        }, {
+            "name": "Test resources",
+            "type": "go",
+            "request": "launch",
+            "mode": "auto",
+            "program": "${workspaceRoot}/examples/test/test.go",
+            "env": {},
+            "args": []
         }
     ]
 }

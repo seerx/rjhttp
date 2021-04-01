@@ -1,10 +1,11 @@
 package web
 
 import (
+	"fmt"
 	"net/http"
 	"strings"
 
-	"github.com/seerx/rjhttp/internal/handlers/web/pages"
+	"github.com/seerx/rjhttp/resources"
 )
 
 // BASE HTML 文件路径
@@ -22,7 +23,8 @@ func (i *File) ServeHTTP(writer http.ResponseWriter, request *http.Request) {
 	//	return
 	//}
 
-	data, err := pages.Asset(fileName)
+	// data, err := pages.Asset(fileName)
+	data, err := resources.Html.ReadFile(fmt.Sprintf("html/%s", fileName))
 	if err != nil {
 		writer.WriteHeader(http.StatusNotFound)
 		return
@@ -46,5 +48,4 @@ func (i *File) ServeHTTP(writer http.ResponseWriter, request *http.Request) {
 		writer.Header().Add("Content-Type", "text/css; charset=utf-8")
 	}
 	writer.Write(data)
-
 }
