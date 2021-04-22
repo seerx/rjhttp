@@ -36,19 +36,19 @@ func (b *Builder) Register(loaders ...rj.Loader) *Builder {
 	return b
 }
 
-// Inject 注册注入函数 func(arg map[string]interface{}) (*Type, error)
-func (b *Builder) Inject(fns ...interface{}) *Builder {
+// RegisterProvider 注册注入函数 func(arg map[string]interface{}) (*Type, error)
+func (b *Builder) RegisterProvider(fns ...interface{}) *Builder {
 	for _, fn := range fns {
-		if err := b.runner.Inject(fn); err != nil {
+		if err := b.runner.RegisterProvider(fn); err != nil {
 			panic(err)
 		}
 	}
 	return b
 }
 
-// InjectAccessController 注册权限控制相关的注入函数
-func (b *Builder) InjectAccessController(fn interface{}) *Builder {
-	if err := b.runner.InjectAccessController(fn); err != nil {
+// RegisterAccessController 注册权限控制相关的注入函数
+func (b *Builder) RegisterAccessController(fn interface{}) *Builder {
+	if err := b.runner.RegisterAccessController(fn); err != nil {
 		panic(err)
 	}
 	return b

@@ -46,16 +46,16 @@ func injectShuttlecraft(arg *rj.InjectArg) (rjh.Shuttlecraft, error) {
 // NewRjHandler 创建 runjson handler
 func NewRjHandler(runner *runjson.Runner, opt *option.Option) *RjHandler {
 	// 注入额外数据提供者
-	if err := runner.Inject(injectExtra); err != nil {
+	if err := runner.RegisterProvider(injectExtra); err != nil {
 		panic(err)
 	}
 	// 注入数据传送者
-	if err := runner.Inject(injectShuttlecraft); err != nil {
+	if err := runner.RegisterProvider(injectShuttlecraft); err != nil {
 		panic(err)
 	}
 	if opt.EnableUpload {
 		// 注入上传文件操作结构体
-		if err := runner.Inject(injectUpload); err != nil {
+		if err := runner.RegisterProvider(injectUpload); err != nil {
 			panic(err)
 		}
 		// 可以上传文件

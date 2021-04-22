@@ -23,17 +23,17 @@ func Register(loaders ...rj.Loader) *Builder {
 	return instance.Register(loaders...)
 }
 
-// Inject 注册注入函数 func(arg map[string]interface{}) (*Type, error)
-func Inject(fns ...interface{}) *Builder {
+// RegisterProvider 注册注入函数 func(arg map[string]interface{}) (*Type, error)
+func RegisterProvider(fns ...interface{}) *Builder {
 	for _, fn := range fns {
-		instance.Inject(fn)
+		instance.RegisterProvider(fn)
 	}
 	return instance
 }
 
-// InjectAccessController 注册权限控制能力的注入函数
-func InjectAccessController(fn interface{}) *Builder {
-	return instance.InjectAccessController(fn)
+// RegisterAccessController 注册权限控制能力的注入函数
+func RegisterAccessController(fn interface{}) *Builder {
+	return instance.RegisterAccessController(fn)
 }
 
 // SetLogger 设置日志记录

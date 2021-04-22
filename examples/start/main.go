@@ -15,8 +15,8 @@ import (
 func init() {
 	rjhttp.EnableWebClient(true).
 		EnableUpload(true).
-		Inject(InjectResponse).
-		Inject(InjectRequest).
+		RegisterProvider(InjectResponse).
+		RegisterProvider(InjectRequest).
 		Register(&demo.Demo1{})
 }
 
